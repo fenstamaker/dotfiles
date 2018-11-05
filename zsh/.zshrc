@@ -35,13 +35,13 @@ source $HOME/.zsh.d/plugins/powerlevel9k/powerlevel9k.zsh-theme
 
 ## Plugins
 source $HOME/.zsh.d/plugins/alias-tips/alias-tips.plugin.zsh
-source $HOME/.zsh.d/plugins/autopair/autopair.zsh
-source $HOME/.zsh.d/plugins/audtosuggestions/zsh-autosuggestions.zsh
+source $HOME/.zsh.d/plugins/zsh-autopair/autopair.zsh
+source $HOME/.zsh.d/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 #source $HOME/.zsh.d/plugins/autoswitch-virtualenv/autoswitch_virtualenv.plugin.zsh
-source $HOME/.zsh.d/plugins/bd/bd.zsh
+source $HOME/.zsh.d/plugins/zsh-bd/bd.zsh
 source $HOME/.zsh.d/plugins/calc.plugin.zsh/calc.plugin.zsh
 source $HOME/.zsh.d/plugins/careful_rm/careful_rm.plugin.zsh
-#source $HOME/.zsh.d/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+source $HOME/.zsh.d/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 source $HOME/.zsh.d/plugins/fzf-marks/fzf-marks.plugin.zsh
 
 
@@ -76,17 +76,36 @@ POWERLEVEL9K_CUSTOM_CLOKTA_SESSION_FOREGROUND="white"
 GREP_OPTIONS="--color=auto"
 CLICOLOR=1
 
-alias reload="source ~/.zshrc"
-alias l='exa -algF'
-alias ll='exa -algF'
-alias t='exa --tree'
-alias tt='exa --tree'
-alias ls='ls -lAh'
-
+## Keybindings
+bindkey -e
 bindkey '^[recent' fzf-history-widget
 bindkey '\C-x\C-f' fzf-file-widget
 bindkey '^[findfile' fzf-file-widget
-bindkey '^[goto' fzf-cd-widget
+bindkey '\C-f' fzf-cd-widget
+
+bindkey '\e\e[C' forward-word
+bindkey '\e\e[C' forward-word
+
+## Shell Aliases
+alias reload="source ~/.zshrc"
+alias l='exa -algF'
+alias ll='exa -algF'
+alias ls='exa -algF'
+alias t='exa --tree'
+alias tt='exa --tree'
+#alias ls='ls -lAh'
+
+## Dev Aliases
+alias dc="docker-compose"
+alias ga="git-add"
+alias gaa="git-add ."
+alias gs="git status"
+alias gr="git reset"
+alias gp="git push origin"
+alias gpp="git push origin master"
+
+## App aliases
+alias sublime="open -a /Applications/Sublime\ Text.app"
 
 # alias bigdata="source /Users/fenstamaker/.clokta/bigdata.sh";
 # alias arc="envdir ~/.envs/arc"
@@ -105,7 +124,6 @@ bindkey '^[goto' fzf-cd-widget
 
 # alias ungron="gron --ungron"
 
-# #alias dc="docker-compose"
 # #alias dcu="docker-compose up"
 # #alias dcb="docker-compose build"
 
@@ -223,10 +241,3 @@ bindkey '^[goto' fzf-cd-widget
 #     git add $1
 #     git status
 # }
-
-# alias ga="git-add"
-# alias gaa="git-add ."
-# alias gs="git status"
-# alias gr="git reset"
-# alias gp="git push origin"
-# alias gpp="git push origin master"

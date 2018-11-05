@@ -1,1 +1,1 @@
-("~/Developer/setup/dotfiles/")
+("~/dotfiles/zsh/plugins/fast-syntax-highlighting/" "~/Developer/setup/dotfiles/")
