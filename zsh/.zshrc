@@ -34,13 +34,13 @@ POWERLEVEL9K_MODE='nerdfont-complete'
 source $HOME/.zsh.d/plugins/powerlevel9k/powerlevel9k.zsh-theme
 
 ## Plugins
-source $HOME/.zsh.d/plugins/alias-tips/alias-tips.plugin.zsh
+#source $HOME/.zsh.d/plugins/alias-tips/alias-tips.plugin.zsh
 source $HOME/.zsh.d/plugins/zsh-autopair/autopair.zsh
 source $HOME/.zsh.d/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 #source $HOME/.zsh.d/plugins/autoswitch-virtualenv/autoswitch_virtualenv.plugin.zsh
-source $HOME/.zsh.d/plugins/zsh-bd/bd.zsh
-source $HOME/.zsh.d/plugins/calc.plugin.zsh/calc.plugin.zsh
-source $HOME/.zsh.d/plugins/careful_rm/careful_rm.plugin.zsh
+#source $HOME/.zsh.d/plugins/zsh-bd/bd.zsh
+#source $HOME/.zsh.d/plugins/calc.plugin.zsh/calc.plugin.zsh
+#source $HOME/.zsh.d/plugins/careful_rm/careful_rm.plugin.zsh
 source $HOME/.zsh.d/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 source $HOME/.zsh.d/plugins/fzf-marks/fzf-marks.plugin.zsh
 
@@ -49,10 +49,9 @@ source $HOME/.zsh.d/plugins/fzf-marks/fzf-marks.plugin.zsh
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     user
     custom_clokta_session
-    dir_writable
     dir
-    vcs
     virtualenv
+    vcs
 )
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     status
@@ -87,7 +86,7 @@ bindkey '\e\e[C' forward-word
 bindkey '\e\e[C' forward-word
 
 ## Shell Aliases
-alias reload="source ~/.zshrc"
+alias reload="source ~/.zshrc && exec zsh"
 alias l='exa -algF'
 alias ll='exa -algF'
 alias ls='exa -algF'
@@ -106,6 +105,9 @@ alias gpp="git push origin master"
 
 ## App aliases
 alias sublime="open -a /Applications/Sublime\ Text.app"
+
+## Dockerapps
+alias aws="docker run -it --rm -v "${HOME}/.aws:/root/.aws" --log-driver none --name aws awscli"
 
 # alias bigdata="source /Users/fenstamaker/.clokta/bigdata.sh";
 # alias arc="envdir ~/.envs/arc"
