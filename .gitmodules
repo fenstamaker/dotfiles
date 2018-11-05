@@ -1,0 +1,45 @@
+[submodule "zsh/plugins/powerlevel9k"]
+	path = zsh/plugins/powerlevel9k
+	url = https://github.com/bhilburn/powerlevel9k.git
+[submodule "zsh/plugins/alias-tips"]
+	path = zsh/plugins/alias-tips
+	url = https://github.com/djui/alias-tips.git
+[submodule "zsh/plugins/calc.plugin.zsh"]
+	path = zsh/plugins/calc.plugin.zsh
+	url = git@github.com:arzzen/calc.plugin.zsh.git
+[submodule "zsh/plugins/zsh-bd"]
+	path = zsh/plugins/zsh-bd
+	url = git@github.com:Tarrasch/zsh-bd.git
+[submodule "zsh/plugins/zsh-autopair"]
+	path = zsh/plugins/zsh-autopair
+	url = git@github.com:hlissner/zsh-autopair.git
+[submodule "zsh/plugins/zsh-autosuggestions"]
+	path = zsh/plugins/zsh-autosuggestions
+	url = git@github.com:zsh-users/zsh-autosuggestions.git
+[submodule "zsh-autoswitch-virtualenv"]
+	path = zsh-autoswitch-virtualenv
+	url = git@github.com:MichaelAquilina/zsh-autoswitch-virtualenv.git
+[submodule "zsh/plugins/zsh-autoswitch-virtualenv"]
+	path = zsh/plugins/zsh-autoswitch-virtualenv
+	url = git@github.com:MichaelAquilina/zsh-autoswitch-virtualenv.git
+[submodule "zsh/plugins/careful_rm"]
+	path = zsh/plugins/careful_rm
+	url = git@github.com:MikeDacre/careful_rm.git
+[submodule "zsh/plugins/fast-syntax-highlighting"]
+	path = zsh/plugins/fast-syntax-highlighting
+	url = git@github.com:zdharma/fast-syntax-highlighting.git
+[submodule "zsh/plugins/fzf-marks"]
+	path = zsh/plugins/fzf-marks
+	url = git@github.com:urbainvaes/fzf-marks.git
+[submodule "zsh/plugins/zsh-better-npm-completion"]
+	path = zsh/plugins/zsh-better-npm-completion
+	url = git@github.com:lukechilds/zsh-better-npm-completion.git
+[submodule "zsh/plugins/kafka-zsh-completions"]
+	path = zsh/plugins/kafka-zsh-completions
+	url = git@github.com:Dabz/kafka-zsh-completions.git
+[submodule "iterm2/themes/iterm2-material-design"]
+	path = iterm2/themes/iterm2-material-design
+	url = git@github.com:MartinSeeler/iterm2-material-design.git
+[submodule "iterm2/themes/materialshell"]
+	path = iterm2/themes/materialshell
+	url = git@github.com:carloscuesta/materialshell.git

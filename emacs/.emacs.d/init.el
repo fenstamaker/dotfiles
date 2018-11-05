@@ -92,9 +92,9 @@
 (delete-selection-mode 1)
 
 ;; Always display line and column numbers
-(setq line-number-mode t)
 (setq column-number-mode t)
-(setq linum-format " %3d ")
+(global-display-line-numbers-mode t)
+(setq display-line-numbers "%4d \u2502 ")
 
 (setq transient-mark-mode t)
 
@@ -138,7 +138,6 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (global-auto-revert-mode t)
-(global-linum-mode t)
 (global-visual-line-mode t)
 
 (defun kill-other-buffers ()
@@ -469,13 +468,6 @@
   (setq web-mode-enable-current-element-highlight t)
   (setq web-mode-enable-current-column-highlight t))
 
-(use-package prettier-js
-  :load-path
-  "packages/"
-  :config
-  (setq prettier-target-mode "web-mode")
-  )
-
 (use-package yaml-mode
   :ensure t
   :config
@@ -500,6 +492,7 @@
   )
 
 (use-package highlight-indentation
+  :ensure t
   :config
   (add-hook 'yaml-mode-hook 'highlight-indentation-mode)
   (add-hook 'yaml-mode-hook 'highlight-indentation-current-column-mode)
@@ -520,8 +513,7 @@
 (use-package git-gutter
   :ensure t
   :config
-  (global-git-gutter-mode t)
-  (git-gutter:linum-setup))
+  (global-git-gutter-mode t))
 
 ;;; Aliases
 (defalias 'ff        'helm-findfiles)
@@ -614,21 +606,21 @@ point reaches the beginning or end of the buffer, stop there."
   (load-theme 'solarized-dark))
 
 (add-to-list 'default-frame-alist '(font . "Source Code Pro-15"))
-(set-face-attribute 'region nil
-                    :foreground "#760CE8"
-                    :background "#fff")
+;; (set-face-attribute 'region nil
+;;                     :foreground "#760CE8"
+;;                     :background "#fff")
 
-(set-face-attribute 'helm-selection nil
-                    :foreground "#d30a65"
-                    :background "#fff")
+;; (set-face-attribute 'helm-selection nil
+;;                     :foreground "#d30a65"
+;;                     :background "#fff")
 
-(set-face-attribute 'show-paren-match-face nil
-                    :foreground "#d32682"
-                    :background nil)
+;; (set-face-attribute 'show-paren-match-face nil
+;;                     :foreground "#d32682"
+;;                     :background nil)
 
-(set-face-attribute 'show-paren-match-face nil
-        :weight 'bold :underline nil :overline nil :slant 'normal)
+;; (set-face-attribute 'show-paren-match-face nil
+;;         :weight 'bold :underline nil :overline nil :slant 'normal)
 
-(set-face-foreground 'show-paren-mismatch-face "#FF0000")
-(set-face-attribute 'show-paren-mismatch-face nil
-                    :weight 'bold :underline t :overline nil :slant 'normal)
+;; (set-face-foreground 'show-paren-mismatch-face "#FF0000")
+;; (set-face-attribute 'show-paren-mismatch-face nil
+;;                     :weight 'bold :underline t :overline nil :slant 'normal)

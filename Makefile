@@ -14,6 +14,7 @@ brew:
 	brew install python
 	brew install python3
 	brew install redis
+	brew install ruby
 	brew install tmux
 	brew install tree
 	brew install yarn
@@ -37,16 +38,19 @@ brew:
 	brew install leiningen
 	brew install boot-clj
 
+.PHONY: pip
+pip:
+	pip3 install virtualenvwrapper
+
 .PHONY: zsh
 zsh:
 	brew install zsh zsh-completions
+	brew install fzf
+	brew install exa
+	/usr/local/opt/fzf/install
 	grep "$$(which zsh)" /etc/shells || echo "$$(which zsh)" | sudo tee -a /etc/shells
 	echo $$SHELL | grep zsh || chsh -s "$$(which zsh)"
-	if [ ! -d $(HOME)/powerlevel9k ]; then \
-	  git clone https://github.com/bhilburn/powerlevel9k.git $(HOME)/powerlevel9k; \
-	else \
-	  git -C $(HOME)/powerlevel9k pull origin master; \
-	fi
+
 
 .PHONY: fonts
 fonts:
@@ -59,21 +63,24 @@ fonts:
 
 .PHONY: dotfiles
 dotfiles:
-	ln -snf $(CURDIR)/dotfiles/emacs/.emacs.d $(HOME)/.emacs.d
-	ln -snf $(CURDIR)/dotfiles/git/.gitignore $(HOME)/.gitignore_global
-	ln -snf $(CURDIR)/dotfiles/env/.env $(HOME)/.env
-	ln -snf $(CURDIR)/dotfiles/zsh/.zshenv $(HOME)/.zshenv
-	ln -snf $(CURDIR)/dotfiles/zsh/.zshrc $(HOME)/.zshrc
+	mkdir -p $(HOME)/.zsh.d
+	ln -snf $(CURDIR)/emacs/.emacs.d $(HOME)/.emacs.d
+	ln -snf $(CURDIR)/git/.gitignore $(HOME)/.gitignore_global
+	ln -snf $(CURDIR)/zsh/.zshrc $(HOME)/.zshrc
+	ln -snf $(CURDIR)/zsh/.zprofile $(HOME)/.zprofile
+	ln -snf $(CURDIR)/zsh/plugins $(HOME)/.zsh.d/plugins
 	git config --global core.excludesfile $(HOME)/.gitignore_global
 
 .PHONY: all
 install: \
 	brew \
+	pip \
 	zsh \
 	fonts
 
 .PHONY: uninstall
 uninstall:
+	/usr/local/opt/fzf/uninstall
 	brew cleanup
 	/usr/bin/ruby -e "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
 	rm -f $(HOME)/.emacs.d
