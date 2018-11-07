@@ -1,5 +1,17 @@
+## Autocompletion
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+fi
+autoload -Uz compinit
+compinit
+
+## Useful tools
 source /usr/local/bin/virtualenvwrapper.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+## Zsh
+# Shortens how long to wait when using ESC/Alt
+KEYTIMEOUT=1
 
 setopt NO_HUP
 # Treat the '!' character specially during expansion.
@@ -7,6 +19,7 @@ setopt BANG_HIST
 # Write the history file in the ":start:elapsed;command" format.
 setopt EXTENDED_HISTORY
 # Write to the history file immediately, not when the shell exits.
+setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY
 # Share history between all sessions.
 setopt SHARE_HISTORY
@@ -29,7 +42,7 @@ setopt HIST_VERIFY
 # Beep when accessing nonexistent history.
 setopt HIST_BEEP
 
-
+## Plugins
 POWERLEVEL9K_MODE='nerdfont-complete'
 source $HOME/.zsh.d/plugins/powerlevel9k/powerlevel9k.zsh-theme
 
@@ -75,6 +88,20 @@ POWERLEVEL9K_CUSTOM_CLOKTA_SESSION_FOREGROUND="white"
 GREP_OPTIONS="--color=auto"
 CLICOLOR=1
 
+## Functions
+git-add() {
+    git add $1
+    git status
+}
+
+load_env() {
+    ENV_FILE=$1
+    shift
+    CMD="$@"
+    SCRIPT="source ~/.envs/.${ENV_FILE}; $CMD"
+    zsh -ac $SCRIPT
+}
+
 ## Keybindings
 bindkey -e
 bindkey '^[recent' fzf-history-widget
@@ -82,11 +109,10 @@ bindkey '\C-x\C-f' fzf-file-widget
 bindkey '^[findfile' fzf-file-widget
 bindkey '\C-f' fzf-cd-widget
 
-bindkey '\e\e[C' forward-word
-bindkey '\e\e[C' forward-word
+bindkey "^[[3~" delete-char
 
 ## Shell Aliases
-alias reload="source ~/.zshrc && exec zsh"
+alias reload="source ~/.zshrc && exec zsh -l"
 alias l='exa -algF'
 alias ll='exa -algF'
 alias ls='exa -algF'
@@ -98,16 +124,17 @@ alias tt='exa --tree'
 alias dc="docker-compose"
 alias ga="git-add"
 alias gaa="git-add ."
-alias gs="git status"
-alias gr="git reset"
+alias gcm="git commit -m"
 alias gp="git push origin"
 alias gpp="git push origin master"
+alias gr="git reset"
+alias gs="git status"
 
 ## App aliases
 alias sublime="open -a /Applications/Sublime\ Text.app"
 
 ## Dockerapps
-alias aws="docker run -it --rm -v "${HOME}/.aws:/root/.aws" --log-driver none --name aws awscli"
+# alias aws="docker run -it --rm -v "${HOME}/.aws:/root/.aws" --log-driver none --name aws awscli"
 
 # alias bigdata="source /Users/fenstamaker/.clokta/bigdata.sh";
 # alias arc="envdir ~/.envs/arc"
@@ -237,9 +264,4 @@ alias aws="docker run -it --rm -v "${HOME}/.aws:/root/.aws" --log-driver none --
 #     unset AWS_ACCESS_KEY_ID;
 #     unset AWS_SECRET_ACCESS_KEY;
 #     unset AWS_SESSION_TOKEN;
-# }
-
-# git-add() {
-#     git add $1
-#     git status
 # }
