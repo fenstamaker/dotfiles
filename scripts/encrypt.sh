@@ -26,7 +26,11 @@ source ~/.envs/.kms || exit 1
 key=${!key_path}
 
 if [ -z "$1" ]; then
-    read -r input
+    if [ -t 0 ]; then
+        read -r input
+    else
+        input=$(cat)
+    fi
 else
     input=$1
 fi
