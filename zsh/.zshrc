@@ -47,11 +47,11 @@ POWERLEVEL9K_MODE='nerdfont-complete'
 source $HOME/.zsh.d/plugins/powerlevel9k/powerlevel9k.zsh-theme
 
 ## Plugins
-#source $HOME/.zsh.d/plugins/alias-tips/alias-tips.plugin.zsh
+source $HOME/.zsh.d/plugins/alias-tips/alias-tips.plugin.zsh
 source $HOME/.zsh.d/plugins/zsh-autopair/autopair.zsh
 source $HOME/.zsh.d/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 #source $HOME/.zsh.d/plugins/autoswitch-virtualenv/autoswitch_virtualenv.plugin.zsh
-#source $HOME/.zsh.d/plugins/zsh-bd/bd.zsh
+source $HOME/.zsh.d/plugins/zsh-bd/bd.zsh
 #source $HOME/.zsh.d/plugins/calc.plugin.zsh/calc.plugin.zsh
 #source $HOME/.zsh.d/plugins/careful_rm/careful_rm.plugin.zsh
 source $HOME/.zsh.d/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
@@ -94,12 +94,22 @@ git-add() {
     git status
 }
 
-load_env() {
+load() {
     ENV_FILE=$1
     shift
     CMD="$@"
-    SCRIPT="source ~/.envs/.${ENV_FILE}; $CMD"
+    FILE="${HOME}/.envs/.${ENV_FILE}"
+    if [ ! -f $FILE ]; then
+        FILE="${HOME}/.clokta/${ENV_FILE}.env"
+        if [ ! -f $FILE ]; then
+            echo "Could not file env file"
+            return 1
+        fi
+    fi
+
+    SCRIPT="source ${FILE} || exit 1; $CMD"
     zsh -ac $SCRIPT
+    return 0
 }
 
 ## Keybindings
@@ -197,7 +207,6 @@ alias sublime="open -a /Applications/Sublime\ Text.app"
 #   bindkey ${terminfo[k$kcap]-$seq} shift-$key
 # }
 # source /usr/local/bin/virtualenvwrapper.sh
-
 # kms-decrypt() {
 #     if [ -z "$1" ]
 #     then read input

@@ -23,6 +23,7 @@ brew "git"
 brew "jq"
 brew "kafka"
 brew "leiningen"
+brew "mas"
 brew "postgresql"
 brew "redis"
 brew "tldr"
@@ -40,6 +41,8 @@ cask "iterm2"
 cask "psequel"
 cask "spectacle"
 cask "adoptopenjdk/openjdk/adoptopenjdk8"
+
+mas "Bear", id: 1091189122
 
 # # Fonts
 cask "font-source-code-pro", args: { force: true }

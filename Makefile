@@ -26,7 +26,6 @@ dotfiles:
 	mkdir -p $(HOME)/.zsh.d
 	ln -snf $(CURDIR)/emacs/.emacs.d $(HOME)/.emacs.d
 	ln -snf $(CURDIR)/git/.gitignore $(HOME)/.gitignore_global
-	ln -snf $(CURDIR)/env $(HOME)/.envs
 	ln -snf $(CURDIR)/zsh/.zshrc $(HOME)/.zshrc
 	ln -snf $(CURDIR)/zsh/.zprofile $(HOME)/.zprofile
 	ln -snf $(CURDIR)/zsh/plugins $(HOME)/.zsh.d/plugins
