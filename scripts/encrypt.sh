@@ -1,28 +1,29 @@
 #!/bin/bash
-usage="$(basename "$0") [-r] [-k n] -- program to calculate the answer to life, the universe and everything
+usage="Usage: $(basename "$0")
 
-where:
+Helper script when using AWS KMS to encrypt.
+
+Options:
     -h  show this help text
-    -s  set the seed value (default: 42)"
+    -r  Specify AWS Region to run in. (Default is us-east-1 or whatever is in $AWS_REGION)
+    -k  Specify the Key Alias."
 
 
 if [ -z $AWS_REGION ]; then
     AWS_REGION="us-east-1"
 fi
 
-while getopts ":r:k:" o; do
-    case "${o}" in
+while getopts ":r:k:h" opt; do
+    case "${opt}" in
         r)
-            shift
             AWS_REGION=${OPTARG}
             ;;
         k)
-            shift
             k=${OPTARG}
             ;;
     esac
-    shift
 done
+shift $((OPTIND -1))
 
 key_region=$(echo $AWS_REGION | tr '[:lower:]' '[:upper:]' | tr "-" "_")
 key_name=$(echo $k | tr '[:lower:]' '[:upper:]' | tr "-" "_")

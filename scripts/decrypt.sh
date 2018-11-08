@@ -6,12 +6,11 @@ fi
 while getopts ":r:" o; do
     case "${o}" in
         r)
-            shift
             AWS_REGION=${OPTARG}
             ;;
     esac
-    shift
 done
+shift $((OPTIND -1))
 
 if [ -z "$1" ]; then
     if [ -t 0 ]; then
