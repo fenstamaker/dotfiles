@@ -8,7 +8,8 @@ tap "homebrew/core"
 ## Languages
 brew "clojure"
 cask "java"
-cask "adoptopenjdk/openjdk/adoptopenjdk8"
+cask "adoptopenjdk8"
+cask "java8"
 brew "node"
 brew "python"
 brew "ruby", link: true
@@ -35,8 +36,11 @@ brew "zsh-completions"
 
 ## GUIs
 cask "1password"
+cask "alfred"
 cask "dash"
 cask "emacs"
+cask "firefox"
+cask "insomnia"
 cask "iterm2"
 cask "psequel"
 cask "spectacle"

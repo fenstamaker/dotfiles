@@ -94,6 +94,11 @@ git-add() {
     git status
 }
 
+git-clone() {
+    git clone $1
+    git submodule update --init
+}
+
 load() {
     ENV_FILE=$1
     shift
@@ -139,6 +144,8 @@ alias gp="git push origin"
 alias gpp="git push origin master"
 alias gr="git reset"
 alias gs="git status"
+alias gcc="git clone --recurse-submodules"
+alias gl="git log --graph --decorate --pretty=oneline --abbrev-commit master origin/master temp"
 
 ## App aliases
 alias sublime="open -a /Applications/Sublime\ Text.app"
@@ -176,8 +183,8 @@ alias sublime="open -a /Applications/Sublime\ Text.app"
 # alias man="tldr"
 # alias json="jq"
 
-# alias java8="export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)"
-# alias java9="export JAVA_HOME=$(/usr/libexec/java_home -v 9)"
+alias java8="export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)"
+alias java11="export JAVA_HOME=$(/usr/libexec/java_home -v 11)"
 
 # findreplace () { sed -i '' -- "s/$1/$2/g" * }
 

@@ -22,9 +22,20 @@ else
     input=$1
 fi
 
-aws kms decrypt \
-    --ciphertext-blob fileb://<(echo $input | base64 -D) \
-    --output text \
-    --region $AWS_REGION \
-    --query Plaintext |
-    base64 --decode
+regex='^(.*)\%\{(.*)\}(.*)$';
+if [[ $input =~ $regex ]]; then
+    pre="${BASH_REMATCH[1]}"
+    body="${BASH_REMATCH[2]}"
+    post="${BASH_REMATCH[3]}"
+else
+    body=$input
+fi
+
+result=$(aws kms decrypt \
+             --ciphertext-blob fileb://<(echo $body | base64 -D) \
+             --output text \
+             --region $AWS_REGION \
+             --query Plaintext |
+             base64 --decode)
+
+echo "$pre$result$post"
