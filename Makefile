@@ -31,6 +31,12 @@ dotfiles:
 	ln -snf $(CURDIR)/zsh/plugins $(HOME)/.zsh.d/plugins
 	git config --global core.excludesfile $(HOME)/.gitignore_global
 
+.PHONY: stackjack
+stackjack:
+	mkdir -p ~/.stackjack
+	[ ! -d "$(HOME)/.stackjack/aws-templates" ] && git clone git@github.com:WPMedia/aws-templates.git ~/.stackjack/aws-templates
+	./stackjack/aws-templates/install-to-my-machine
+
 .PHONY: all
 install: \
 	brew \

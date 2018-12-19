@@ -606,17 +606,17 @@ point reaches the beginning or end of the buffer, stop there."
   (load-theme 'solarized-dark))
 
 (add-to-list 'default-frame-alist '(font . "Source Code Pro-15"))
-;; (set-face-attribute 'region nil
-;;                     :foreground "#760CE8"
-;;                     :background "#fff")
+(set-face-attribute 'region nil
+                    :foreground nil
+                    :background "#fff")
 
 ;; (set-face-attribute 'helm-selection nil
 ;;                     :foreground "#d30a65"
 ;;                     :background "#fff")
 
-;; (set-face-attribute 'show-paren-match-face nil
-;;                     :foreground "#d32682"
-;;                     :background nil)
+(set-face-attribute 'show-paren-match nil
+                    :foreground nil
+                    :background "#024a5b")
 
 ;; (set-face-attribute 'show-paren-match-face nil
 ;;         :weight 'bold :underline nil :overline nil :slant 'normal)

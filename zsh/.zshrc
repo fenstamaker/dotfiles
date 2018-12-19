@@ -9,6 +9,15 @@ compinit
 source /usr/local/bin/virtualenvwrapper.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# export FZF_COMPLETION_TRIGGER=''
+# bindkey '^T' fzf-completion
+# bindkey '^I' $fzf_default_completion
+fd() {
+  local dir
+  dir=$(find ${1:-.} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
 ## Zsh
 # Shortens how long to wait when using ESC/Alt
 KEYTIMEOUT=1
@@ -115,6 +124,14 @@ load() {
     SCRIPT="source ${FILE} || exit 1; $CMD"
     zsh -ac $SCRIPT
     return 0
+}
+
+copy-nile() {
+    STAGE=$1
+    cat nile.yml | \
+        yq -c ".environments[] | select( .name | contains(\"$STAGE\") )" | \
+        jq -c ".override.services | to_entries | first | .value.environment" | \
+        jq -r 'to_entries | map(.key + "=" + .value) | join("\n")'
 }
 
 ## Keybindings

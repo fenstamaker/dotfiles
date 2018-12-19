@@ -24,18 +24,28 @@ fi
 
 regex='^(.*)\%\{(.*)\}(.*)$';
 if [[ $input =~ $regex ]]; then
-    pre="${BASH_REMATCH[1]}"
-    body="${BASH_REMATCH[2]}"
-    post="${BASH_REMATCH[3]}"
+    while [[ $input =~ $regex ]]; do
+        pre="${BASH_REMATCH[1]}"
+        body="${BASH_REMATCH[2]}"
+        post="${BASH_REMATCH[3]}"
+
+        result=$(aws kms decrypt \
+                     --ciphertext-blob fileb://<(echo $body | tr -d " \t\n\r" | base64 -D) \
+                     --output text \
+                     --region $AWS_REGION \
+                     --query Plaintext |
+                     base64 --decode)
+
+        input="$pre$result$post"
+    done
+    echo "$input";
 else
     body=$input
+    result=$(aws kms decrypt \
+                 --ciphertext-blob fileb://<(echo $body | tr -d " \t\n\r" | base64 -D) \
+                 --output text \
+                 --region $AWS_REGION \
+                 --query Plaintext |
+                 base64 --decode)
+    echo $result;
 fi
-
-result=$(aws kms decrypt \
-             --ciphertext-blob fileb://<(echo $body | base64 -D) \
-             --output text \
-             --region $AWS_REGION \
-             --query Plaintext |
-             base64 --decode)
-
-echo "$pre$result$post"

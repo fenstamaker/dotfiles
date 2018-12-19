@@ -48,7 +48,7 @@ fi
 
 aws kms encrypt \
     --key-id ${key} \
-    --plaintext fileb://<(echo $input) \
+    --plaintext fileb://<(echo $input | tr -d " \t\n\r") \
     --output text \
     --region $AWS_REGION \
     --query CiphertextBlob

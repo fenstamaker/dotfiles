@@ -3,6 +3,7 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        keyboard-escape-quit
         ))
 
 (setq mc/cmds-to-run-once
