@@ -1,26 +1,17 @@
-## Autocompletion
-if type brew &>/dev/null; then
-  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
-fi
 autoload -Uz compinit
 compinit
 
-## Useful tools
-source /usr/local/bin/virtualenvwrapper.sh
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+## Autocompletion
+if type brew &>/dev/null; then
+  HOMEBREW_PREFIX=$(brew --prefix)
+  FPATH=${HOMEBREW_PREFIX}/share/zsh/site-functions:$FPATH
+  FPATH=${HOMEBREW_PREFIX}/share/zsh-completions:$FPATH
+fi
 
-# export FZF_COMPLETION_TRIGGER=''
-# bindkey '^T' fzf-completion
-# bindkey '^I' $fzf_default_completion
-fd() {
-  local dir
-  dir=$(find ${1:-.} -path '*/\.*' -prune \
-                  -o -type d -print 2> /dev/null | fzf +m) &&
-  cd "$dir"
-}
-## Zsh
-# Shortens how long to wait when using ESC/Alt
-KEYTIMEOUT=1
+## Useful tools
+[ -f /usr/local/bin/virtualenvwrapper.sh ] && source /usr/local/bin/virtualenvwrapper.sh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f /usr/local/etc/profile.d/z.sh ] && source /usr/local/etc/profile.d/z.sh
 
 setopt NO_HUP
 # Treat the '!' character specially during expansion.
@@ -60,17 +51,39 @@ source $HOME/.zsh.d/plugins/alias-tips/alias-tips.plugin.zsh
 source $HOME/.zsh.d/plugins/zsh-autopair/autopair.zsh
 source $HOME/.zsh.d/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 #source $HOME/.zsh.d/plugins/autoswitch-virtualenv/autoswitch_virtualenv.plugin.zsh
-source $HOME/.zsh.d/plugins/zsh-bd/bd.zsh
+#source $HOME/.zsh.d/plugins/zsh-bd/bd.zsh
 #source $HOME/.zsh.d/plugins/calc.plugin.zsh/calc.plugin.zsh
 #source $HOME/.zsh.d/plugins/careful_rm/careful_rm.plugin.zsh
 source $HOME/.zsh.d/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
-source $HOME/.zsh.d/plugins/fzf-marks/fzf-marks.plugin.zsh
+#source $HOME/.zsh.d/plugins/fzf-marks/fzf-marks.plugin.zsh
+source $HOME/.zsh.d/plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
+source $HOME/.zsh.d/plugins/forgit/forgit.plugin.zsh
 
+## Hooks
+
+function zshaddhistory() {
+    emulate -L zsh
+    if [[ $1 =~ "rm|^echo" ]] ; then
+        return 1
+    fi
+}
+
+## Config
+
+# Shortens how long to wait when using ESC/Alt
+KEYTIMEOUT=1
+CASE_SENSITIVE="false"
+
+FZF_COMPLETION_TRIGGER='**'
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=80
+
+GREP_OPTIONS="--color=auto"
+CLICOLOR=1
 
 ## Powerlevel
+
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     user
-    custom_clokta_session
     dir
     virtualenv
     vcs
@@ -83,19 +96,14 @@ POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     command_execution_time
     time
 )
+
+POWERLEVEL9K_VCS_GIT_HOOKS=(
+    vcs-detect-changes
+    git-aheadbehind
+    git-remotebranch
+)
+
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-
-clokta_session() {
-    echo -n "Clokta";
-}
-
-POWERLEVEL9K_CUSTOM_CLOKTA_SESSION="clokta_session"
-POWERLEVEL9K_CUSTOM_CLOKTA_SESSION_BACKGROUND="blue"
-POWERLEVEL9K_CUSTOM_CLOKTA_SESSION_FOREGROUND="white"
-
-
-GREP_OPTIONS="--color=auto"
-CLICOLOR=1
 
 ## Functions
 git-add() {
@@ -106,6 +114,12 @@ git-add() {
 git-clone() {
     git clone $1
     git submodule update --init
+}
+
+# Print line from file
+# line 10,13 will print lines 10-13
+line() {
+    sed -n "${1}p" $2
 }
 
 load() {
@@ -134,27 +148,95 @@ copy-nile() {
         jq -r 'to_entries | map(.key + "=" + .value) | join("\n")'
 }
 
+yaml() {
+    read -r INPUT
+    yamllint <(echo $INPUT)
+}
+
+# Fuzzy cd
+fd() {
+  local dir
+  dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
+}
+
+# Go up parent directories
+fdr() {
+  local declare dirs=()
+  get_parent_dirs() {
+    if [[ -d "${1}" ]]; then dirs+=("$1"); else return; fi
+    if [[ "${1}" == '/' ]]; then
+      for _dir in "${dirs[@]}"; do echo $_dir; done
+    else
+      get_parent_dirs $(dirname "$1")
+    fi
+  }
+  local DIR=$(get_parent_dirs $(realpath "${1:-$PWD}") | fzf-tmux --tac)
+  cd "$DIR"
+}
+
+# Find file and cd into containing dir
+fdf() {
+   local file
+   local dir
+   file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
+}
+
+# Fuzzy history search
+fh() {
+  print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+}
+
+# Find text in project
+vg() {
+  local file
+  local line
+
+  read -r file line <<<"$(ag --nobreak --noheading $@ | fzf -0 -1 | awk -F: '{print $1, $2}')"
+
+  if [[ -n $file ]]
+  then
+     emacs $file +$line
+  fi
+}
+
+# CD to common directories
+unalias z
+z() {
+  if [[ -z "$*" ]]; then
+    cd "$(_z -l 2>&1 | fzf +s --tac | sed 's/^[0-9,.]* *//')"
+  else
+    _last_z_args="$@"
+    _z "$@"
+  fi
+}
+
+zz() {
+  cd "$(_z -l 2>&1 | sed 's/^[0-9,.]* *//' | fzf -q "$_last_z_args")"
+}
+
 ## Keybindings
 bindkey -e
-bindkey '^[recent' fzf-history-widget
-bindkey '\C-x\C-f' fzf-file-widget
-bindkey '^[findfile' fzf-file-widget
-bindkey '\C-f' fzf-cd-widget
-
 bindkey "^[[3~" delete-char
+bindkey '^[[A' history-beginning-search-backward
+bindkey '^[[B' history-beginning-search-forward
+
+bindkey '^W' fzf-completion
+bindkey '^I' $fzf_default_completion
+
 
 ## Shell Aliases
-alias reload="source ~/.zshrc && exec zsh -l"
+alias hd='fd ~'
 alias l='exa -algF'
 alias ll='exa -algF'
 alias ls='exa -algF'
+alias reload="exec zsh -l"
 alias t='exa --tree'
 alias tt='exa --tree'
-#alias ls='ls -lAh'
+alias tree='exa --tree'
 
 ## Dev Aliases
 alias dc="docker-compose"
-alias ga="git-add"
+#alias ga="git-add"
 alias gaa="git-add ."
 alias gcm="git commit -m"
 alias gp="git push origin"
@@ -166,6 +248,10 @@ alias gl="git log --graph --decorate --pretty=oneline --abbrev-commit master ori
 
 ## App aliases
 alias sublime="open -a /Applications/Sublime\ Text.app"
+
+## Script aliases
+alias decrypt="~/dotfiles/scripts/decrypt.sh"
+alias encrypt="~/dotfiles/scripts/encrypt.sh"
 
 ## Dockerapps
 # alias aws="docker run -it --rm -v "${HOME}/.aws:/root/.aws" --log-driver none --name aws awscli"

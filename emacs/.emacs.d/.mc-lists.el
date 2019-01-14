@@ -10,4 +10,5 @@
       '(
         helm-M-x
         yaml-electric-backspace
+        yaml-electric-dash-and-dot
         ))
