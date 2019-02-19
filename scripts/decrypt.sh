@@ -13,15 +13,12 @@ done
 shift $((OPTIND -1))
 
 if [ -z "$1" ]; then
-    if [ -t 0 ]; then
-        read -r input
-    else
-        input=$(cat)
-    fi
+    input=$(cat)
 else
     input=$1
 fi
 
+echo ""
 regex='^(.*)\%\{(.*)\}(.*)$';
 if [[ $input =~ $regex ]]; then
     while [[ $input =~ $regex ]]; do
@@ -30,7 +27,7 @@ if [[ $input =~ $regex ]]; then
         post="${BASH_REMATCH[3]}"
 
         result=$(aws kms decrypt \
-                     --ciphertext-blob fileb://<(echo $body | tr -d " \t\n\r" | base64 -D) \
+                     --ciphertext-blob fileb://<(echo $body | tr -d "[[:space:]]" | base64 --decode) \
                      --output text \
                      --region $AWS_REGION \
                      --query Plaintext |
@@ -42,10 +39,10 @@ if [[ $input =~ $regex ]]; then
 else
     body=$input
     result=$(aws kms decrypt \
-                 --ciphertext-blob fileb://<(echo $body | tr -d " \t\n\r" | base64 -D) \
+                 --ciphertext-blob fileb://<(echo $body | tr -d "[[:space:]]" | base64 --decode) \
                  --output text \
                  --region $AWS_REGION \
                  --query Plaintext |
                  base64 --decode)
-    echo $result;
+    echo $result
 fi
