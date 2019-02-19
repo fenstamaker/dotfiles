@@ -63,7 +63,7 @@ source $HOME/.zsh.d/plugins/forgit/forgit.plugin.zsh
 
 function zshaddhistory() {
     emulate -L zsh
-    if [[ $1 =~ "rm|^echo" ]] ; then
+    if [[ $1 =~ "\brm\b|^echo" ]] ; then
         return 1
     fi
 }
@@ -145,7 +145,7 @@ copy-nile() {
     cat nile.yml | \
         yq -c ".environments[] | select( .name | contains(\"$STAGE\") )" | \
         jq -c ".override.services | to_entries | first | .value.environment" | \
-        jq -r 'to_entries | map(.key + "=" + .value) | join("\n")'
+        jq -r 'to_entries | map(.key + "=" + (.value|tostring)) | join("\n")'
 }
 
 yaml() {
@@ -220,8 +220,8 @@ bindkey "^[[3~" delete-char
 bindkey '^[[A' history-beginning-search-backward
 bindkey '^[[B' history-beginning-search-forward
 
-bindkey '^W' fzf-completion
-bindkey '^I' $fzf_default_completion
+# bindkey '^W' fzf-completion
+# bindkey '^I' $fzf_default_completion
 
 
 ## Shell Aliases
@@ -245,13 +245,13 @@ alias gr="git reset"
 alias gs="git status"
 alias gcc="git clone --recurse-submodules"
 alias gl="git log --graph --decorate --pretty=oneline --abbrev-commit master origin/master temp"
+alias num="nl"
+alias linenum="nl"
+alias json="jq -C | less -R"
+alias avro="avro-tools"
 
 ## App aliases
 alias sublime="open -a /Applications/Sublime\ Text.app"
-
-## Script aliases
-alias decrypt="~/dotfiles/scripts/decrypt.sh"
-alias encrypt="~/dotfiles/scripts/encrypt.sh"
 
 ## Dockerapps
 # alias aws="docker run -it --rm -v "${HOME}/.aws:/root/.aws" --log-driver none --name aws awscli"
