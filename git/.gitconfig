@@ -11,15 +11,23 @@
         ui = true
 
 [color "diff-highlight"]
-       oldNormal = red bold
-       oldHighlight = red bold 52
-       newNormal = green bold
-       newHighlight = green bold 22
+        oldNormal = red bold
+        oldHighlight = red bold 52
+        newNormal = green bold
+        newHighlight = green bold 22
 
 [color "diff"]
-       meta = yellow
-       frag = magenta bold
-       commit = yellow bold
-       old = red bold
-       new = green bold
-       whitespace = red reverse
+        meta = yellow
+        frag = magenta bold
+        commit = yellow bold
+        old = red bold
+        new = green
+        whitespace = red reverse
+
+# [submodule]
+#         recurse = true
+
+[alias]
+        cc = clone --recursive
+[credential]
+	helper = osxkeychain

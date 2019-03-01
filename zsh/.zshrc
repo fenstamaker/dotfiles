@@ -135,7 +135,7 @@ load() {
         fi
     fi
 
-    SCRIPT="source ${FILE} || exit 1; $CMD"
+    SCRIPT="source ${HOME}/.zshrc; source ${FILE} || exit 1; $CMD"
     zsh -ac $SCRIPT
     return 0
 }

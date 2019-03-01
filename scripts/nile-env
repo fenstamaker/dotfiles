@@ -1,0 +1,100 @@
+#!/bin/bash
+set -e
+HELP=$(cat << EOF
+Usage: $(basename "$0") [options] (ENV)
+Retrieves the environment variables set in the ENV stage of the nile.yml in th e cwd and formats them into a bash-friendly export format.
+
+EOF
+)
+HELP_OPTS=$(cat <<EOF
+  -h, --help \t Shows this help text.
+  -f, --full \t Merges the nile.yml and docker-compose.yml environments, replicating the behavior of Nile.
+  -v, --verbose \t Prints more logs
+EOF
+)
+
+usage() {
+    echo "$HELP"
+    echo ""
+    column -t -s $'\t' <(echo -e "$HELP_OPTS")
+    exit 1
+}
+
+debug() {
+    if [ $VERBOSE -eq 1 ]; then
+        >&2 echo "[DEBUG] $1"
+    fi
+}
+
+error() {
+    >&2 echo "[ERROR] $1"
+}
+
+FULL=0
+while :; do
+    case $1 in
+        -h|-\?|--help)
+            usage
+            ;;
+
+        -f|--full)
+            FULL=1
+            ;;
+
+        -v|--verbose)
+            VERBOSE=1
+            ;;
+
+        --)
+            shift
+            break
+            ;;
+
+        -?*)
+            error "Unknown option ${1}"
+            echo ""
+            usage
+            ;;
+
+        *)
+            break
+    esac
+    shift
+done
+
+STAGE=$1
+
+if [ -z $STAGE ]; then
+    error "Missing stage argument."
+    echo ""
+    usage
+fi
+
+if [ ! -f "./nile.yml" ]; then
+    error "Missing nile.yml file"
+    echo ""
+    usage
+fi
+
+if [ $FULL -eq 1 ] && [ ! -f "./docker-compose.yml" ]; then
+    error "--full argument specified but not docker-compose.yml found"
+    echo ""
+    usage
+fi
+
+debug "Fetching nile.yml stage"
+NILE=$(cat nile.yml | \
+           yq -c ".environments[] | select(.name==\"$STAGE\")" | \
+           jq -c ".override.services | to_entries | first | .value.environment")
+
+if [ $FULL -eq 1 ]; then
+    debug "Fetching docker-compose.yml"
+    DC=$(cat docker-compose.yml | \
+             yq -c ".services | to_entries | first | .value.environment")
+
+    debug "Merging docker-compose.yml and nile.yml"
+    NILE=$(echo "$DC $NILE" | jq -s add)
+fi
+
+echo $NILE | \
+    jq -r 'to_entries | map(.key + "=" + (.value|tostring)) | join("\n")'

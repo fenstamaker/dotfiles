@@ -4,7 +4,7 @@
 uname -s | grep -q "_NT-" && export WINDOWS=1
 grep -q "Microsoft" /proc/version 2>/dev/null && export UBUNTU_ON_WINDOWS=1
 
-PATH=/usr/local/opt/python/libexec/bin:/usr/local/opt/coreutils/libexec/gnubin:$PATH
+PATH=:/usr/local/opt/python/libexec/bin:/usr/local/opt/coreutils/libexec/gnubin:${HOME}/dotfiles/scripts:$PATH
 EDITOR=vim
 HISTFILE=~/.zsh_history
 HISTSIZE=10000000

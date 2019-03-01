@@ -8,9 +8,9 @@ tap "homebrew/core"
 
 ## Languages
 brew "clojure"
-cask "java"
-cask "adoptopenjdk8"
-cask "java8"
+#cask "java"
+#cask "adoptopenjdk8"
+#cask "java8"
 brew "maven"
 brew "node"
 brew "python"
@@ -20,6 +20,7 @@ brew "ruby", link: true
 brew "coreutils"
 brew "diff-so-fancy"
 brew "fzf"
+brew "watch"
 
 ## TUIs
 cask "1password-cli"
@@ -44,6 +45,7 @@ brew "tldr"
 brew "tmux"
 brew "tree"
 brew "yarn"
+brew "pipenv"
 brew "python-yq"
 brew "yamllint"
 brew "xsv"

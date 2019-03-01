@@ -7,7 +7,6 @@ bootstrap:
 
 .PHONY: brew
 brew:
-	brew upgrade
 	brew bundle
 
 .PHONY: pip
@@ -31,6 +30,7 @@ dotfiles:
 	ln -snf $(CURDIR)/zsh/.zshrc $(HOME)/.zshrc
 	ln -snf $(CURDIR)/zsh/.zprofile $(HOME)/.zprofile
 	ln -snf $(CURDIR)/zsh/plugins $(HOME)/.zsh.d/plugins
+	ln -snf $(CURDIR)/eslint/.eslintrc $(HOME)/.eslintrc
 
 .PHONY: stackjack
 stackjack:
