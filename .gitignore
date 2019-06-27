@@ -15,6 +15,9 @@ Thumbs.db
 .\#*
 recentf
 projectile-bookmarks.eld
+emacs/emacs.d/*
+!init.el
+!lisp/
 
 elpa/
 melpa/
