@@ -1,0 +1,9 @@
+;s
+ls
+ls
+gs
+git add
+git add .
+git commit -m "Forgot the resource tag"
+git branch
+git push origin temp-perm
