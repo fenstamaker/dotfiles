@@ -30,4 +30,4 @@
 [alias]
         cc = clone --recursive
 [credential]
-	helper = osxkeychain
+	helper = store --file ~/.my-credentials

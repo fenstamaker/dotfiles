@@ -5,6 +5,7 @@ tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/core"
+tap "homebrew/services"
 
 ## Languages
 brew "clojure"
@@ -15,12 +16,15 @@ brew "maven"
 brew "node"
 brew "python"
 brew "ruby", link: true
+brew "prettier"
+brew "typescript"
 
 ## Tools / Libraries
 brew "coreutils"
 brew "diff-so-fancy"
 brew "fzf"
 brew "watch"
+cask "docker"
 
 ## TUIs
 cask "1password-cli"
@@ -34,6 +38,7 @@ brew "fx"
 brew "git"
 brew "gron"
 brew "httpie"
+brew "hub"
 brew "jq"
 brew "kafka"
 brew "leiningen"
@@ -41,6 +46,7 @@ brew "mas"
 brew "pandoc"
 brew "postgresql"
 brew "redis"
+brew "the_silver_searcher"s
 brew "tldr"
 brew "tmux"
 brew "tree"
@@ -56,6 +62,7 @@ brew "z"
 ## GUIs
 cask "1password"
 cask "alfred"
+cask "aerial"
 cask "dash"
 cask "emacs"
 cask "firefox", { force: true }

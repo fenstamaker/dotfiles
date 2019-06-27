@@ -16,6 +16,7 @@
     "no-constant-condition": ["error", {"checkLoops": false}],
     "no-unused-vars": ["error", { "args": "none" }],
     "new-cap": ["error", { "capIsNew": false }],
+    "no-console": 0,
     "import/prefer-default-export": 0,
     "import/no-extraneous-dependencies": 0,
     "indent": 0,

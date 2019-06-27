@@ -43,3 +43,6 @@
 [submodule "iterm2/themes/materialshell"]
 	path = iterm2/themes/materialshell
 	url = git@github.com:carloscuesta/materialshell.git
+[submodule "emacs/emacs.d"]
+	path = emacs/emacs.d
+	url = git@github.com:fenstamaker/emacs.d.git

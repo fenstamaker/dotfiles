@@ -23,14 +23,22 @@ zsh:
 .PHONY: dotfiles
 dotfiles:
 	mkdir -p $(HOME)/.zsh.d
-	ln -snf $(CURDIR)/emacs/.emacs.d $(HOME)/.emacs.d
+	ln -snf $(CURDIR)/emacs/emacs.d $(HOME)/.emacs.d
 	ln -snf $(CURDIR)/git/.gitconfig $(HOME)/.gitconfig
 	ln -snf $(CURDIR)/git/.gitignore $(HOME)/.gitignore_global
 	ln -snf $(CURDIR)/fzf/.fzf.zsh $(HOME)/.fzf.zsh
 	ln -snf $(CURDIR)/zsh/.zshrc $(HOME)/.zshrc
 	ln -snf $(CURDIR)/zsh/.zprofile $(HOME)/.zprofile
+	ln -snf $(CURDIR)/zsh/.zshenv $(HOME)/.zshenv
 	ln -snf $(CURDIR)/zsh/plugins $(HOME)/.zsh.d/plugins
 	ln -snf $(CURDIR)/eslint/.eslintrc $(HOME)/.eslintrc
+
+.PHONY: lsp
+lsp:
+	npm i -g typescript-language-server
+	npm i -g javascript-typescript-langserver
+	npm i -g bash-language-server
+	pip install ‘python-language-server[all]’
 
 .PHONY: stackjack
 stackjack:

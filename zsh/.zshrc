@@ -116,29 +116,71 @@ git-clone() {
     git submodule update --init
 }
 
+git-branch-from-master() {
+    if [ -z $1 ]; then
+        echo "Missing branch name"
+        exit 1
+    fi
+    git checkout master
+    git pull origin master
+    git checkout -b $1
+}
+
+gpp() {
+    BRANCH=$1
+    if [ -z $BRANCH ]; then
+        BRANCH=$(git branch | grep \* | cut -d ' ' -f2)
+    fi
+    git push origin $BRANCH
+}
+
+url-encode() {
+    local string="${1}"
+    local strlen=${#string}
+    local encoded=""
+    local pos c o
+
+    for (( pos=0 ; pos<strlen ; pos++ )); do
+        c=${string:$pos:1}
+        case "$c" in
+            [-_.~a-zA-Z0-9] ) o="${c}" ;;
+            * )               printf -v o '%%%02x' "'$c"
+        esac
+        encoded+="${o}"
+    done
+    echo "${encoded}"    # You can either set a return variable (FASTER)
+    REPLY="${encoded}"   #+or echo the result (EASIER)... or both... :p
+}
+
+url-decode() {
+    # urldecode <string>
+
+    local url_encoded="${1//+/ }"
+    printf '%b' "${url_encoded//%/\\x}"
+}
 # Print line from file
 # line 10,13 will print lines 10-13
 line() {
     sed -n "${1}p" $2
 }
 
-load() {
-    ENV_FILE=$1
-    shift
-    CMD="$@"
-    FILE="${HOME}/.envs/.${ENV_FILE}"
-    if [ ! -f $FILE ]; then
-        FILE="${HOME}/.clokta/${ENV_FILE}.env"
-        if [ ! -f $FILE ]; then
-            echo "Could not file env file"
-            return 1
-        fi
-    fi
+# load() {
+#     ENV_FILE=$1
+#     shift
+#     CMD="$@"
+#     FILE="${HOME}/.envs/.${ENV_FILE}"
+#     if [ ! -f $FILE ]; then
+#         FILE="${HOME}/.clokta/${ENV_FILE}.env"
+#         if [ ! -f $FILE ]; then
+#             echo "Could not file env file"
+#             return 1
+#         fi
+#     fi
 
-    SCRIPT="source ${HOME}/.zshrc; source ${FILE} || exit 1; $CMD"
-    zsh -ac $SCRIPT
-    return 0
-}
+#     SCRIPT="source ${HOME}/.zshrc; source ${FILE} || exit 1; $CMD"
+#     zsh -ac $SCRIPT
+#     return 0
+# }
 
 copy-nile() {
     STAGE=$1
@@ -157,6 +199,11 @@ yaml() {
 fd() {
   local dir
   dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
+}
+
+pd() {
+  local dir
+  dir=$(find ~/Projects -type d 2> /dev/null | fzf +m) && cd "$dir"
 }
 
 # Go up parent directories
@@ -223,8 +270,12 @@ bindkey '^[[B' history-beginning-search-forward
 # bindkey '^W' fzf-completion
 # bindkey '^I' $fzf_default_completion
 
+# Text mods
+alias comma='paste -sd "," -'
+alias stripquotes="sed -e 's/^\"//' -e 's/\"$//'"
 
 ## Shell Aliases
+alias load='clokta-load'
 alias hd='fd ~'
 alias l='exa -algF'
 alias ll='exa -algF'
@@ -239,16 +290,17 @@ alias dc="docker-compose"
 #alias ga="git-add"
 alias gaa="git-add ."
 alias gcm="git commit -m"
-alias gp="git push origin"
-alias gpp="git push origin master"
+alias gp="git push"
 alias gr="git reset"
 alias gs="git status"
 alias gcc="git clone --recurse-submodules"
 alias gl="git log --graph --decorate --pretty=oneline --abbrev-commit master origin/master temp"
+alias gbm="git-branch-from-master"
 alias num="nl"
 alias linenum="nl"
 alias json="jq -C | less -R"
 alias avro="avro-tools"
+alias ip="ifconfig | grep 'inet ' | grep -Fv 127.0.0.1 | awk '{print \$2}'"
 
 ## App aliases
 alias sublime="open -a /Applications/Sublime\ Text.app"
