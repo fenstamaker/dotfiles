@@ -18,6 +18,7 @@ projectile-bookmarks.eld
 emacs/emacs.d/*
 !init.el
 !lisp/
+!emacs/emacs.d/plugins/
 
 elpa/
 melpa/
