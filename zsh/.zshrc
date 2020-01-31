@@ -1,5 +1,19 @@
-autoload -Uz compinit
-compinit
+
+# uautoload -Uz compinit
+# compinit
+
+if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+fi
+
+alias java8="export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)"
+alias java11="export JAVA_HOME=$(/usr/libexec/java_home -v 11)"
+export WORKON_HOME=~/.venv
+export PIPENV_VENV_IN_PROJECT=1
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 ## Autocompletion
 if type brew &>/dev/null; then
@@ -9,9 +23,21 @@ if type brew &>/dev/null; then
 fi
 
 ## Useful tools
-[ -f /usr/local/bin/virtualenvwrapper.sh ] && source /usr/local/bin/virtualenvwrapper.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f /usr/local/etc/profile.d/z.sh ] && source /usr/local/etc/profile.d/z.sh
+
+
+source /usr/local/share/antigen/antigen.zsh
+
+antigen bundle hlissner/zsh-autopair
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zdharma/fast-syntax-highlighting
+antigen bundle changyuheng/zsh-interactive-cd
+antigen bundle wfxr/forgit
+
+antigen theme romkatv/powerlevel10k
+antigen apply
+
 
 setopt NO_HUP
 # Treat the '!' character specially during expansion.
@@ -44,20 +70,14 @@ setopt HIST_BEEP
 
 ## Plugins
 POWERLEVEL9K_MODE='nerdfont-complete'
-source $HOME/.zsh.d/plugins/powerlevel9k/powerlevel9k.zsh-theme
+# source $HOME/.zsh.d/plugins/powerlevel9k/powerlevel9k.zsh-theme
 
 ## Plugins
-source $HOME/.zsh.d/plugins/alias-tips/alias-tips.plugin.zsh
-source $HOME/.zsh.d/plugins/zsh-autopair/autopair.zsh
-source $HOME/.zsh.d/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-#source $HOME/.zsh.d/plugins/autoswitch-virtualenv/autoswitch_virtualenv.plugin.zsh
-#source $HOME/.zsh.d/plugins/zsh-bd/bd.zsh
-#source $HOME/.zsh.d/plugins/calc.plugin.zsh/calc.plugin.zsh
-#source $HOME/.zsh.d/plugins/careful_rm/careful_rm.plugin.zsh
-source $HOME/.zsh.d/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
-#source $HOME/.zsh.d/plugins/fzf-marks/fzf-marks.plugin.zsh
-source $HOME/.zsh.d/plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
-source $HOME/.zsh.d/plugins/forgit/forgit.plugin.zsh
+# source $HOME/.zsh.d/plugins/zsh-autopair/autopair.zsh
+# source $HOME/.zsh.d/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+# source $HOME/.zsh.d/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+# source $HOME/.zsh.d/plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
+# source $HOME/.zsh.d/plugins/forgit/forzsh-interactive-cd.plugin.zshgit.plugin.zsh
 
 ## Hooks
 
@@ -261,6 +281,14 @@ zz() {
   cd "$(_z -l 2>&1 | sed 's/^[0-9,.]* *//' | fzf -q "$_last_z_args")"
 }
 
+lower() {
+    echo "$1" | tr '[:upper:]' '[:lower:]'
+}
+
+upper() {
+    echo "$1" | tr '[:lower:]' '[:upper:]'
+}
+
 ## Keybindings
 bindkey -e
 bindkey "^[[3~" delete-char
@@ -281,9 +309,9 @@ alias l='exa -algF'
 alias ll='exa -algF'
 alias ls='exa -algF'
 alias reload="exec zsh -l"
-alias t='exa --tree'
-alias tt='exa --tree'
-alias tree='exa --tree'
+alias t='exa --tree --git-ignore'
+alias tt='exa --tree --git-ignore'
+alias tree='exa --tree --git-ignore'
 
 ## Dev Aliases
 alias dc="docker-compose"
@@ -337,9 +365,6 @@ alias sublime="open -a /Applications/Sublime\ Text.app"
 # alias manuel="/usr/bin/man"
 # alias man="tldr"
 # alias json="jq"
-
-alias java8="export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)"
-alias java11="export JAVA_HOME=$(/usr/libexec/java_home -v 11)"
 
 # findreplace () { sed -i '' -- "s/$1/$2/g" * }
 
