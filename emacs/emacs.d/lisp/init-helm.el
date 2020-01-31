@@ -23,6 +23,7 @@
   (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
   (global-set-key (kbd "C-x C-b") #'helm-mini)
   (global-set-key (kbd "s-b") #'helm-mini)
+  (global-set-key (kbd "C-s") #'helm-swoop-without-pre-input)
 
   (setq helm-M-x-fuzzy-match t
         helm-buffers-fuzzy-matching t

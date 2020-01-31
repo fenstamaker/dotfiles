@@ -35,6 +35,8 @@
 
 (require 'old-init)
 
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(setq vc-follow-symlinks t)
 ;;; Navigation
 
 (bind-key* (kbd "C-@") 'er/expand-region)
@@ -58,13 +60,14 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(groovy-indent-offset 2)
  '(lsp-prefer-flymake nil)
  '(lsp-ui-doc-border "gray50")
  '(lsp-ui-doc-delay 0.5)
  '(lsp-ui-doc-header nil)
  '(lsp-ui-doc-include-signature t)
  '(lsp-ui-doc-max-height 50)
- '(lsp-ui-doc-position (quote bottom))
+ '(lsp-ui-doc-position 'bottom)
  '(lsp-ui-doc-use-childframe t)
  '(lsp-ui-doc-use-webkit nil)
  '(lsp-ui-flycheck-live-reporting t)
@@ -75,10 +78,9 @@
  '(lsp-ui-sideline-show-diagnostics t)
  '(lsp-ui-sideline-show-hover nil)
  '(lsp-ui-sideline-show-symbol t)
- '(lsp-ui-sideline-update-mode (quote line))
+ '(lsp-ui-sideline-update-mode 'line)
  '(package-selected-packages
-   (quote
-    (flycheck window-purpose company-box lsp-ui yaml-mode web-mode use-package typescript-mode spacemacs-theme smartparens projectile prettier-js multiple-cursors lsp-treemacs inf-clojure highlight-indent-guides helm-swoop helm-lsp helm-ls-git groovy-mode git-gutter exec-path-from-shell diminish csv-mode company-lsp))))
+   '(pipenv jupyter flycheck window-purpose company-box lsp-ui yaml-mode web-mode use-package typescript-mode spacemacs-theme smartparens projectile prettier-js multiple-cursors lsp-treemacs inf-clojure highlight-indent-guides helm-swoop helm-lsp helm-ls-git groovy-mode git-gutter exec-path-from-shell diminish csv-mode company-lsp)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

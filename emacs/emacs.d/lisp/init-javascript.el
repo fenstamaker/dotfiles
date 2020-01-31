@@ -18,7 +18,7 @@
   (add-to-list 'auto-mode-alist '("\\.avsc\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.babelrc\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.[m]?js[x]?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.ts[x]?\\'" . web-mode))
+  ;; (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
 
 
   (set-face-foreground 'web-mode-current-column-highlight-face nil)
@@ -48,10 +48,17 @@
   (setq web-mode-enable-auto-quoting t)
 
   (setq web-mode-enable-current-element-highlight t)
-  (setq web-mode-enable-current-column-highlight t))
+  (setq web-mode-enable-current-column-highlight t)
 
-;; (use-package typescript-mode
-;;   :ensure t)
+  )
+
+(use-package typescript-mode
+  :ensure t
+  :config
+  (setq typescript-indent-level 2)
+  (add-to-list 'auto-mode-alist '("\.ts[x]?\'" . typescript-mode))
+
+  )
 
 (use-package prettier-js
   :ensure t

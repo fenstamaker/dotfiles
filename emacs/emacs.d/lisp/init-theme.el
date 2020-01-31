@@ -49,19 +49,23 @@
   (setq highlight-indent-guides-delay 0)
   )
 
-;;; Enable line-numbers
-(setq
- column-number-mode t
- global-display-line-numbers-mode t
- display-line-numbers "%4d \u2502 ")
 
-;;; Cursor Options
-(setq
- blink-cursor-mode -1
- cursor-type 'box)
+(add-hook
+ 'emacs-startup-hook
+ (lambda nil
+   ;; Enable line-numbers
+   (setq
+    column-number-mode t
+    global-display-line-numbers-mode t
+    display-line-numbers "%4d \u2502 ")
 
-;;; Turn off word wrap
-(setq truncate-lines t)
+   ;; Cursor Options
+   (setq
+    blink-cursor-mode -1
+    cursor-type 'box)
+
+   ;; Turn off word wrap
+   (setq truncate-lines t)))
 
 (provide 'init-theme)
 ;;; init-theme.el ends here

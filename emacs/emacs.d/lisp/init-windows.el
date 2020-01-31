@@ -43,10 +43,15 @@
     (side . bottom) (slot . 1) (preserve-size . (nil . t))
     ,windows/parameters)
 
+   ("\\*Helm Swoop\\*" display-buffer-in-side-window
+    (side . right) (slot . 0) (preserve-size . (nil . t))
+    ,windows/parameters)
 
    ("\\*helm.*\\*" display-buffer-in-side-window
     (side . bottom) (slot . -1) (preserve-size . (nil . t))
     ,windows/parameters)
+
+
    )
  )
 

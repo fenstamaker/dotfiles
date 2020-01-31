@@ -36,7 +36,11 @@
   ;;   :modes (cfn-mode))
   ;; (add-to-list 'flycheck-checkers 'cfn-lint)
 
-  (flycheck-add-mode 'javascript-eslint 'web-mode))
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
+
+
+
+  )
 
 (provide 'init-flycheck)
 ;;; init-flycheck.el ends here

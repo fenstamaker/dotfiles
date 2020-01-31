@@ -23,7 +23,7 @@
 ;;; to configure and use the packages during init. So we turn off
 ;;; automatic package initialization and do it ourselves
 (setq package-enable-at-startup nil)
-(package-initialize)
+;; (package-initialize)
 
 (unless package-archive-contents
   (package-refresh-contents))

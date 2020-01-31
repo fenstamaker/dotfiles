@@ -493,7 +493,7 @@ point reaches the beginning or end of the buffer, stop there."
   )
 
 
-(add-hook 'after-init-hook 'apply-themes)
+(add-hook 'emacs-startup-hook 'apply-themes)
 
 ;; (set-face-attribute 'helm-selection nil
 ;;                     :foreground "#d30a65"
