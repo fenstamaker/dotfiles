@@ -40,12 +40,6 @@ lsp:
 	npm i -g bash-language-server
 	pip install ‘python-language-server[all]’
 
-.PHONY: stackjack
-stackjack:
-	mkdir -p ~/.stackjack
-	[ ! -d "$(HOME)/.stackjack/aws-templates" ] && git clone git@github.com:WPMedia/aws-templates.git ~/.stackjack/aws-templates
-	./stackjack/aws-templates/install-to-my-machine
-
 .PHONY: all
 install: \
 	brew \
@@ -63,4 +57,3 @@ uninstall:
 	rm -f $(HOME)/.gitignore_global
 	rm -f $(HOME)/.zshrc
 	rm -rf $(HOME)/powerlevel9k
-	echo $$SHELL | grep zsh && chsh -s "$$(which bash)"

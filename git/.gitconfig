@@ -31,3 +31,5 @@
         cc = clone --recursive
 [credential]
 	helper = store --file ~/.my-credentials
+[init]
+	defaultBranch = main

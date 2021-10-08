@@ -3,17 +3,45 @@
 # compinit
 
 if command -v pyenv 1>/dev/null 2>&1; then
+    # (The below instructions are intended for common
+    # shell setups. See the README for more guidance
+    # if they don't apply and/or don't work for you.)
+
+    # Add pyenv executable to PATH and
+    # enable shims by adding the following
+    # to ~/.profile and ~/.zprofile:
+
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init --path)"
+
+    # Load pyenv into the shell by adding
+    # the following to ~/.zshrc:
+
     eval "$(pyenv init -)"
+
+    # Make sure to restart your entire logon session
+    # for changes to profile files to take effect.
 fi
 
-alias java8="export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)"
-alias java11="export JAVA_HOME=$(/usr/libexec/java_home -v 11)"
-export WORKON_HOME=~/.venv
-export PIPENV_VENV_IN_PROJECT=1
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+jenv enable-plugin export
+jenv enable-plugin maven
+
+alias java-versions="/usr/libexec/java_home -V"
+alias java8="jenv shell 1.8"
+alias java11="jenv shell 11"
+alias java-latest="jenv shell 15"
+
+#export WORKON_HOME=~/.venv
+#export PIPENV_VENV_IN_PROJECT=0
+source /usr/local/bin/virtualenvwrapper.sh
+
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+# [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 ## Autocompletion
 if type brew &>/dev/null; then
@@ -29,11 +57,11 @@ fi
 
 source /usr/local/share/antigen/antigen.zsh
 
-antigen bundle hlissner/zsh-autopair
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zdharma/fast-syntax-highlighting
 antigen bundle changyuheng/zsh-interactive-cd
 antigen bundle wfxr/forgit
+antigen bundle hlissner/zsh-autopair
 
 antigen theme romkatv/powerlevel10k
 antigen apply
@@ -70,14 +98,6 @@ setopt HIST_BEEP
 
 ## Plugins
 POWERLEVEL9K_MODE='nerdfont-complete'
-# source $HOME/.zsh.d/plugins/powerlevel9k/powerlevel9k.zsh-theme
-
-## Plugins
-# source $HOME/.zsh.d/plugins/zsh-autopair/autopair.zsh
-# source $HOME/.zsh.d/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-# source $HOME/.zsh.d/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
-# source $HOME/.zsh.d/plugins/zsh-interactive-cd/zsh-interactive-cd.plugin.zsh
-# source $HOME/.zsh.d/plugins/forgit/forzsh-interactive-cd.plugin.zshgit.plugin.zsh
 
 ## Hooks
 
@@ -100,31 +120,6 @@ ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=80
 GREP_OPTIONS="--color=auto"
 CLICOLOR=1
 
-## Powerlevel
-
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
-    user
-    dir
-    virtualenv
-    vcs
-)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
-    status
-    root_indicator
-    background_jobs
-    history
-    command_execution_time
-    time
-)
-
-POWERLEVEL9K_VCS_GIT_HOOKS=(
-    vcs-detect-changes
-    git-aheadbehind
-    git-remotebranch
-)
-
-POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-
 ## Functions
 git-add() {
     git add $1
@@ -146,12 +141,34 @@ git-branch-from-master() {
     git checkout -b $1
 }
 
+git-main() {
+  MAIN_EXISTS=$(git ls-remote --heads origin main)
+
+  if [ -z $MAIN_EXISTS ]; then
+    echo "main branch does not exist"
+  else 
+    echo "main branch exists, switching..."
+    git pull
+    git remote set-head origin -a
+    git checkout main
+  fi
+}
+
 gpp() {
     BRANCH=$1
     if [ -z $BRANCH ]; then
         BRANCH=$(git branch | grep \* | cut -d ' ' -f2)
     fi
     git push origin $BRANCH
+}
+
+gpl() {
+    BRANCH=$1
+    if [ -z $BRANCH ]; then
+        BRANCH=$(git branch | grep \* | cut -d ' ' -f2)
+    fi
+    git pull origin $BRANCH
+
 }
 
 url-encode() {
@@ -183,24 +200,6 @@ url-decode() {
 line() {
     sed -n "${1}p" $2
 }
-
-# load() {
-#     ENV_FILE=$1
-#     shift
-#     CMD="$@"
-#     FILE="${HOME}/.envs/.${ENV_FILE}"
-#     if [ ! -f $FILE ]; then
-#         FILE="${HOME}/.clokta/${ENV_FILE}.env"
-#         if [ ! -f $FILE ]; then
-#             echo "Could not file env file"
-#             return 1
-#         fi
-#     fi
-
-#     SCRIPT="source ${HOME}/.zshrc; source ${FILE} || exit 1; $CMD"
-#     zsh -ac $SCRIPT
-#     return 0
-# }
 
 copy-nile() {
     STAGE=$1
@@ -267,19 +266,19 @@ vg() {
 }
 
 # CD to common directories
-unalias z
-z() {
-  if [[ -z "$*" ]]; then
-    cd "$(_z -l 2>&1 | fzf +s --tac | sed 's/^[0-9,.]* *//')"
-  else
-    _last_z_args="$@"
-    _z "$@"
-  fi
-}
+# unalias z
+# z() {
+#   if [[ -z "$*" ]]; then
+#     cd "$(_z -l 2>&1 | fzf +s --tac | sed 's/^[0-9,.]* *//')"
+#   else
+#     _last_z_args="$@"
+#     _z "$@"
+#   fi
+# }
 
-zz() {
-  cd "$(_z -l 2>&1 | sed 's/^[0-9,.]* *//' | fzf -q "$_last_z_args")"
-}
+# zz() {
+#   cd "$(_z -l 2>&1 | sed 's/^[0-9,.]* *//' | fzf -q "$_last_z_args")"
+# }
 
 lower() {
     echo "$1" | tr '[:upper:]' '[:lower:]'
@@ -287,6 +286,18 @@ lower() {
 
 upper() {
     echo "$1" | tr '[:lower:]' '[:upper:]'
+}
+
+mkvenv() {
+    if [ -z $1 ]; then
+        echo "Missing python version. Select from below:"
+        pyenv versions
+    else
+        NAME=$(basename `git rev-parse --show-toplevel`)
+        echo ${NAME}
+        pyenv virtualenv $1 ${NAME}
+        pyenv local ${NAME}
+    fi
 }
 
 ## Keybindings
@@ -321,9 +332,11 @@ alias gcm="git commit -m"
 alias gp="git push"
 alias gr="git reset"
 alias gs="git status"
+alias gss="git stash"
+alias gsp="git stash pop"
 alias gcc="git clone --recurse-submodules"
 alias gl="git log --graph --decorate --pretty=oneline --abbrev-commit master origin/master temp"
-alias gbm="git-branch-from-master"
+alias gm="git-main"
 alias num="nl"
 alias linenum="nl"
 alias json="jq -C | less -R"
@@ -333,131 +346,63 @@ alias ip="ifconfig | grep 'inet ' | grep -Fv 127.0.0.1 | awk '{print \$2}'"
 ## App aliases
 alias sublime="open -a /Applications/Sublime\ Text.app"
 
-## Dockerapps
-# alias aws="docker run -it --rm -v "${HOME}/.aws:/root/.aws" --log-driver none --name aws awscli"
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+source ~/.p10k.zsh
 
-# alias bigdata="source /Users/fenstamaker/.clokta/bigdata.sh";
-# alias arc="envdir ~/.envs/arc"
-# alias ent="envdir ~/.envs/ent"
-# alias syd="envdir ~/.envs/syd"
-# alias wpit="envdir ~/.envs/wpit"
-# alias hp="envdir ~/.envs/hp"
-# alias dw="envdir ~/.envs/dw"
-# alias sdbx="envdir ~/.envs/sandbox"
-# alias awscut="cut -d \" \" -f 3-"
-# alias reload=". ~/.zshrc && echo 'ZSH config reloaded from ~/.zshrc'"
-# alias start_mongo="mongod --config /usr/local/etc/mongod.conf"
-# [[ -s "$HOME/.local/share/marker/marker.sh" ]] && source "$HOME/.local/share/marker/marker.sh"
-# alias icloud="cd ~/Library/Mobile\ Documents/com\~apple\~CloudDocs"
-# alias sublime="open -a /Applications/Sublime\ Text.app"
+function useast() {
+    export AWS_REGION=us-east-1
+    export AWS_DEFAULT_REGION=us-east-1
+}
 
-# alias ungron="gron --ungron"
+function eucentral() {
+    export AWS_REGION=eu-central-1
+    export AWS_DEFAULT_REGION=eu-central-1
+}
 
-# #alias dcu="docker-compose up"
-# #alias dcb="docker-compose build"
+function dw() {
+    clokta --profile dw
+    export AWS_PROFILE=dw
+    useast
+}
 
-# #alias dockerclean="docker rm -v $(docker ps -a -q -f status=exited) && docker rmi $(docker images -f "dangling=true" -q)"
-# #alias dcc="dockerclean"
-# alias subtree="git pull -s subtree"
+function bigdata() {
+    clokta --profile bigdata
+    export AWS_PROFILE=bigdata
+    useast
+}
 
-# alias gcm="git commit -m"
-# alias cheat="tldr"
-# alias manuel="/usr/bin/man"
-# alias man="tldr"
-# alias json="jq"
+function arc() {
+    clokta --profile arc
+    export AWS_PROFILE=arc
+    useast
+}
 
-# findreplace () { sed -i '' -- "s/$1/$2/g" * }
+function arc-perso() {
+    clokta --profile arc-perso
+    export AWS_PROFILE=arc-perso
+    useast
+}
 
-# alias vpn="sudo openconnect --juniper --user=fenstamakerg --authgroup=TWP-main ra.washpost.com"
+function wpit() {
+    clokta --profile wpit
+    export AWS_PROFILE=wpit
+    useast
+}
 
-# # alt <- moves back a word
-# # alt -> moves forward a word
-# bindkey -e
-# bindkey '\e\e[C' forward-word
-# bindkey '\e\e[D' backward-word
+function ai() {
+    clokta --profile ai
+    export AWS_PROFILE=ai
+    useast
+}
 
-# source /Users/fenstamaker/Developer/git-subrepo/.rc
-# fpath=('/Users/fenstamaker/Developer/git-subrepo/share/zsh-completion' $fpath)
+function zeus() {
+    clokta --profile zeus 
+    export AWS_PROFILE=zeus
+    useast
+}
 
-# shift-arrow() {
-#   ((REGION_ACTIVE)) || zle set-mark-command
-#   zle $1
-# }
-# for key kcap seq widget (
-#     left  LFT $'\e[1;2D' backward-char
-#     right RIT $'\e[1;2C' forward-char
-#     up    ri  $'\e[1;2A' up-line-or-history
-#     down  ind $'\e[1;2B' down-line-or-history
-#   ) {
-#   eval "shift-$key() shift-arrow $widget"
-#   zle -N shift-$key
-#   bindkey ${terminfo[k$kcap]-$seq} shift-$key
-# }
-# source /usr/local/bin/virtualenvwrapper.sh
-# kms-decrypt() {
-#     if [ -z "$1" ]
-#     then read input
-#     else
-#         input=$1
-#     fi
-#     aws kms decrypt --ciphertext-blob fileb://<(echo "$input" | base64 --decode) --output text --query Plaintext | base64 --decode
-# }
-
-# eu-kms-decrypt() {
-#     if [ -z "$1" ]
-#     then read input
-#     else
-#         input=$1
-#     fi
-#   aws kms decrypt --ciphertext-blob fileb://<(echo "$input" | base64 --decode) --output text --query Plaintext --region eu-central-1 | base64 --decode
-# }
-
-# arc-kms-decrypt() {
-#     if [ -z "$1" ]
-#     then read input
-#     else
-#         input=$1
-#     fi
-#   arc aws kms decrypt --ciphertext-blob fileb://<(echo "$input" | base64 --decode) --output text --query Plaintext | base64 --decode
-# }
-
-# wpit-kms-decrypt() {
-#     if [ -z "$1" ]
-#     then read input
-#     else
-#         input=$1
-#     fi
-#   wpit aws kms decrypt --ciphertext-blob fileb://<(echo "$input" | base64 --decode) --output text --query Plaintext | base64 --decode
-# }
-
-# syd-kms-decrypt() {
-#     if [ -z "$1" ]
-#     then read input
-#     else
-#         input=$1
-#     fi
-#   syd aws kms decrypt --region ap-southeast-2 --ciphertext-blob fileb://<(echo "$input" | base64 --decode) --output text --query Plaintext | base64 --decode
-# }
-
-# pem-fingerprint() {
-#     if [ -z "$1" ]
-#     then read input
-#     else
-#         input=$1
-#     fi
-#   openssl pkcs8 -in "$input" -inform PEM -outform DER -topk8 -nocrypt | openssl sha1 -c
-# }
-
-# alias clavis-encrypt="arc aws kms encrypt --key-id c95f817d-6381-4b50-8647-bf8114fd24f4 --plaintext"
-# alias perso-encrypt="arc aws kms encrypt --key-id bec6648a-876c-4541-99f8-38c7540f996f --plaintext"
-# alias syd-perso-encrypt="arc aws kms encrypt --region ap-southeast-2 --key-id d8ec7d71-9d6f-4561-ab35-3fca7e3f69e5 --plaintext"
-
-# alias kmsd="kms-decrypt"
-
-# alias clokta="/Users/fenstamaker/.virtualenvs/clokta/bin/clokta"
-
-# clear-clokta() {
-#     unset AWS_ACCESS_KEY_ID;
-#     unset AWS_SECRET_ACCESS_KEY;
-#     unset AWS_SESSION_TOKEN;
-# }
+function zeus-sandbox() { 
+    clokta --profile zeus-sandbox
+    export AWS_PROFILE=zeus-sandbox
+    useast
+}

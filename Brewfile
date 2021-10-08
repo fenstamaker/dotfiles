@@ -1,86 +1,112 @@
 ## Taps
-tap "aws/tap"
 tap "adoptopenjdk/openjdk"
+tap "aljohri/-"
+tap "aws/tap"
+tap "daviderestivo/emacs-head"
+tap "fgeller/tap"
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/cask-fonts"
+tap "homebrew/cask-versions"
 tap "homebrew/core"
 tap "homebrew/services"
+tap "wpmedia/perso-tools"
+
+## Core
+brew "antigen"
+brew "awscli"
+brew "coreutils"
+brew "docker", link: false
+brew "git"
+brew "gnutls"
+brew "grep"
+brew "fzf"
+brew "tldr"
+brew "tmux"
+brew "tree"
+brew "wget"
+brew "zsh"
+brew "zsh-completions"
+
+## Emacs
+brew "daviderestivo/emacs-head/emacs-head@27", args: ["HEAD", "with-cocoa", "with-imagemagick", "with-jansson"]
 
 ## Languages
 brew "clojure"
-#cask "java"
-#cask "adoptopenjdk8"
-#cask "java8"
-brew "maven"
 brew "node"
+#brew "openjdk@8"
 brew "python"
-brew "ruby", link: true
-brew "prettier"
+brew "ruby"
+brew "scala"
 brew "typescript"
 
-## Tools / Libraries
-brew "coreutils"
-brew "diff-so-fancy"
-brew "fzf"
-brew "watch"
-cask "docker"
+## Language Tooling
+brew "jenv"
+brew "leiningen"
+brew "maven"
+brew "nvm"
+brew "pipenv"
+brew "pyenv"
+brew "pyenv-virtualenv"
+brew "yarn"
+
+## Databases
+brew "kafka"
+brew "flyway"
+brew "mysql"
+brew "postgresql", restart_service: true
+brew "redis"
+
+## Services
+brew "apache-spark"
+brew "hive"
+
+## Formatters
+brew "black"
+brew "prettier"
 
 ## TUIs
-cask "1password-cli"
-brew "ag"
-brew "awscli"
-brew "aws-sam-cli"
-brew "boot-clj"
+brew "aws-cdk"
+brew "bat"
+brew "bfg"
+brew "csvkit"
+brew "diff-so-fancy"
 brew "exa"
-# brew "fasd"
 brew "fx"
-brew "git"
 brew "gron"
 brew "httpie"
 brew "hub"
 brew "jq"
-brew "kafka"
-brew "leiningen"
+brew "fgeller/tap/kt"
+brew "lighttpd"
 brew "mas"
 brew "pandoc"
-brew "postgresql"
-brew "redis"
-brew "the_silver_searcher"s
-brew "tldr"
-brew "tmux"
-brew "tree"
-brew "yarn"
-brew "pipenv"
+brew "pngcrush"
+brew "pre-commit"
 brew "python-yq"
-brew "yamllint"
+brew "the_silver_searcher"
+brew "watch"
 brew "xsv"
-brew "zsh"
-brew "zsh-completions"
+brew "yamllint"
+brew "youtube-dl"
 brew "z"
 
-## GUIs
-cask "1password"
-cask "alfred"
+## Custom Tools
+brew "wpmedia/perso-tools/ec2"
+brew "wpmedia/perso-tools/emr"
+brew "wpmedia/perso-tools/kms"
+brew "wpmedia/perso-tools/nile"
+
+## Casks
+cask "1password-cli"
 cask "aerial"
-cask "dash"
-cask "emacs"
-cask "firefox", { force: true }
+cask "alfred"
+cask "font-hack"
+cask "font-hack-nerd-font"
+cask "font-source-code-pro"
+cask "font-source-code-pro-for-powerline"
+cask "font-sourcecodepro-nerd-font"
 cask "insomnia"
 cask "iterm2"
-cask "psequel"
 cask "spectacle"
-cask "transmit"
 cask "visual-studio-code"
-cask "adoptopenjdk/openjdk/adoptopenjdk8"
-
-mas "Bear", id: 1091189122
-mas "Pipifier", id: 1160374471
-mas "Ulysses", id: 1225570693
-
-# # Fonts
-cask "font-source-code-pro", args: { force: true }
-cask "font-source-code-pro-for-powerline", args: { force: true }
-cask "font-sourcecodepro-nerd-font", args: { force: true }
-cask "font-hack", args: { force: true }
-cask "font-hack-nerd-font", args: { force: true }
