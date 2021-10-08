@@ -32,6 +32,7 @@ dotfiles:
 	ln -snf $(CURDIR)/zsh/.zshenv $(HOME)/.zshenv
 	ln -snf $(CURDIR)/zsh/plugins $(HOME)/.zsh.d/plugins
 	ln -snf $(CURDIR)/eslint/.eslintrc $(HOME)/.eslintrc
+	ln -snf $(CURDIR)/iterm2/com.googlecode.iterm2.plist $(HOME)/Library/Preferences/com.googlecode.iterm2.plist
 
 .PHONY: lsp
 lsp:
