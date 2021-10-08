@@ -13,6 +13,7 @@ brew:
 pip:
 	pip3 install virtualenvwrapper
 	pip3 install -U clokta
+	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 -
 
 .PHONY: zsh
 zsh:
@@ -27,10 +28,10 @@ dotfiles:
 	ln -snf $(CURDIR)/git/.gitconfig $(HOME)/.gitconfig
 	ln -snf $(CURDIR)/git/.gitignore $(HOME)/.gitignore_global
 	ln -snf $(CURDIR)/fzf/.fzf.zsh $(HOME)/.fzf.zsh
+	ln -snf $(CURDIR)/p10k/.p10k.zsh $(HOME)/.p10k.zsh
 	ln -snf $(CURDIR)/zsh/.zshrc $(HOME)/.zshrc
 	ln -snf $(CURDIR)/zsh/.zprofile $(HOME)/.zprofile
 	ln -snf $(CURDIR)/zsh/.zshenv $(HOME)/.zshenv
-	ln -snf $(CURDIR)/zsh/plugins $(HOME)/.zsh.d/plugins
 	ln -snf $(CURDIR)/eslint/.eslintrc $(HOME)/.eslintrc
 	ln -snf $(CURDIR)/iterm2/com.googlecode.iterm2.plist $(HOME)/Library/Preferences/com.googlecode.iterm2.plist
 
@@ -47,13 +48,17 @@ install: \
 	pip \
 	zsh
 
+.PHONY cleanup
+cleanup:
+	brew cleanup
+	brew bundle cleanup --force
+
 .PHONY: uninstall
 uninstall:
 	pip3 uninstall clokta
 	pip3 uninstall virtualenvwrapper
 	/usr/local/opt/fzf/uninstall
 	brew cleanup
-	/usr/bin/ruby -e "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
 	rm -f $(HOME)/.emacs.d
 	rm -f $(HOME)/.gitignore_global
 	rm -f $(HOME)/.zshrc
