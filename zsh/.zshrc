@@ -138,13 +138,21 @@ git-clone() {
     git submodule update --init
 }
 
-git-branch-from-master() {
+git-branch-from-main() {
     if [ -z $1 ]; then
         echo "Missing branch name"
         exit 1
     fi
-    git checkout master
-    git pull origin master
+
+    MAIN_EXISTS=$(git ls-remote --heads origin main)
+    if [ -z $MAIN_EXISTS ]; then
+        BRANCH="main"
+    else
+        BRANCH="master"
+    fi
+
+    git checkout $BRANCH
+    git pull origin $BRANCH
     git checkout -b $1
 }
 
@@ -175,7 +183,6 @@ gpl() {
         BRANCH=$(git branch | grep \* | cut -d ' ' -f2)
     fi
     git pull origin $BRANCH
-
 }
 
 url-encode() {
@@ -342,7 +349,7 @@ alias gs="git status"
 alias gss="git stash"
 alias gsp="git stash pop"
 alias gcc="git clone --recurse-submodules"
-alias gl="git log --graph --decorate --pretty=oneline --abbrev-commit master origin/master temp"
+alias gl="git log --graph --decorate --pretty=oneline --abbrev-commit main origin/main temp"
 alias gm="git-main"
 alias num="nl"
 alias linenum="nl"
