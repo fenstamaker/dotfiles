@@ -31,6 +31,7 @@ if command -v pyenv 1>/dev/null 2>&1; then
     # for changes to profile files to take effect.
 fi
 
+export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
 unset JAVA_TOOL_OPTIONS

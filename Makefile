@@ -13,7 +13,6 @@ brew:
 python:
 	pip3 install virtualenvwrapper
 	pip3 install -U clokta
-	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 -
 
 .PHONY: zsh
 zsh:
