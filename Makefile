@@ -9,8 +9,8 @@ bootstrap:
 brew:
 	brew bundle
 
-.PHONY: pip
-pip:
+.PHONY: python
+python:
 	pip3 install virtualenvwrapper
 	pip3 install -U clokta
 	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python3 -
@@ -18,8 +18,7 @@ pip:
 .PHONY: zsh
 zsh:
 	/usr/local/opt/fzf/install
-	grep "$$(which zsh)" /etc/shells || echo "$$(which zsh)" | sudo tee -a /etc/shells
-	echo $$SHELL | grep zsh || chsh -s "$$(which zsh)"
+	sudo dscl . -create /Users/$(USER) UserShell /usr/local/bin/zsh
 
 .PHONY: dotfiles
 dotfiles:
@@ -42,13 +41,13 @@ lsp:
 	npm i -g bash-language-server
 	pip install ‘python-language-server[all]’
 
-.PHONY: all
+.PHONY: install
 install: \
 	brew \
-	pip \
+	python \
 	zsh
 
-.PHONY cleanup
+.PHONY: cleanup
 cleanup:
 	brew cleanup
 	brew bundle cleanup --force
