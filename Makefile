@@ -14,6 +14,12 @@ python:
 	pip3 install virtualenvwrapper
 	pip3 install -U clokta
 
+
+.PHONY: javascript
+javascript:
+	npm install -g npm@latest
+	npm install -g npm-upgrade
+
 .PHONY: zsh
 zsh:
 	/usr/local/opt/fzf/install
@@ -43,6 +49,7 @@ lsp:
 .PHONY: install
 install: \
 	brew \
+	javascript \
 	python \
 	zsh
 
