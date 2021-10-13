@@ -59,6 +59,7 @@ if type brew &>/dev/null; then
   HOMEBREW_PREFIX=$(brew --prefix)
   FPATH=${HOMEBREW_PREFIX}/share/zsh/site-functions:$FPATH
   FPATH=${HOMEBREW_PREFIX}/share/zsh-completions:$FPATH
+  export HOMEBREW_NO_AUTO_UPDATE=1
 fi
 
 ## Useful tools
