@@ -1,0 +1,39 @@
+- name: installing brew jenv
+  community.general.homebrew:
+    name:
+      - jenv
+    state: present
+
+- name: installing openjdk
+  community.general.homebrew:
+    name:
+      - openjdk
+    state: present
+
+- name: link openjdk
+  file:
+    src: /usr/local/opt/openjdk/libexec/openjdk.jdk
+    path: /Library/Java/JavaVirtualMachines/openjdk.jdk
+    state: link
+    force: true
+  become: true
+
+- name: install temurin java
+  community.general.homebrew_cask:
+    name:
+      - temurin8
+      - temurin11
+    state: present
+
+- name: add javas to jenv
+  command: jenv add --skip-existing {{ item }}
+  loop:
+    - /Library/Java/JavaVirtualMachines/temurin-8.jdk/Contents/Home/
+    - /Library/Java/JavaVirtualMachines/temurin-11.jdk/Contents/Home/
+    - /Library/Java/JavaVirtualMachines/openjdk.jdk/Contents/Home
+
+- name: installing maven
+  community.general.homebrew:
+    name:
+      - maven
+    state: present

@@ -1,0 +1,56 @@
+- name: install pyenv python environment
+  homebrew:
+    name:
+      - openssl
+      - readline
+      - sqlite3
+      - xz
+      - zlib
+    state: present
+
+- name: install brew python
+  community.general.homebrew:
+    name:
+      - python
+    state: present
+
+- name: install pyenv
+  community.general.homebrew:
+    name:
+      - pyenv
+    state: present
+
+- name: get pyenv prefix
+  command: pyenv root
+  register: pyenv_path
+
+- name: install global pyenv python
+  command:
+    cmd: pyenv install --skip-existing {{ pyenv_global_version }}
+    creates: "{{ pyenv_path.stdout }}/{{ pyenv_global_version }}"
+
+- name: set pyenv global version
+  command:
+    cmd: pyenv global {{ pyenv_global_version }}
+    creates: "{{ pyenv_path.stdout }}/version"
+
+- name: update pip in pyenv python
+  command:
+    cmd: pyenv exec pip install --upgrade pip
+  tags:
+    - always
+
+- name: install pipx
+  command:
+    cmd: pyenv exec pip install --user pipx
+    creates: ~/.local/bin/pipx
+
+- name: install pipx packages
+  command:
+    cmd: pipx install {{ item }}
+    creates: ~/.local/bin/{{ item }}
+  loop:
+    - black
+    - poetry
+    # Here in case need to work on Pipenv project
+    - pipenv

@@ -1,0 +1,11 @@
+- name: Setting macOS environment
+  hosts: local
+  environment:
+    PATH: "{{ ansible_env.PATH }}:~/.local/bin"
+  roles:
+    # - core
+    # - zsh
+    # - python
+    # - java
+    # - javascript
+    - utilities

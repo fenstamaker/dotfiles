@@ -1,0 +1,56 @@
+- name: tap homebrew repositories
+  community.general.homebrew_tap:
+    name:
+      - aws/tap
+      - fgeller/tap
+      - homebrew/bundle
+      - homebrew/cask
+      - homebrew/cask-fonts
+      - homebrew/cask-versions
+      - homebrew/core
+      - homebrew/services
+    state: present
+
+- name: installing brew core tools
+  community.general.homebrew:
+    name:
+      - awscli
+      - coreutils
+      - git
+      - gnupg
+      - gnutls
+      - grep
+      - ffmpeg
+      - rm-improved
+      - svn
+      - wget
+    state: present
+
+- name: install brew fonts
+  community.general.homebrew_cask:
+    name:
+      - font-hack
+      - font-hack-nerd-font
+      - font-source-code-pro
+      - font-source-code-pro-for-powerline
+    state: present
+
+- name: install brew quicklooks
+  community.general.homebrew_cask:
+    name:
+      - qlcolorcode
+      - qlstephen
+      - qlmarkdown
+      - quicklook-json
+      - webpquicklook
+      - suspicious-package
+      - apparency
+      - quicklookase
+      - qlvideo
+    state: present
+
+- name: move quicklook extensions out of quarantine
+  command: xattr -cr ~/Library/QuickLook
+
+  # - name: move quicklook extensions back into quarantine
+  #   command: xattr -d -r com.apple.quarantine ~/Library/QuickLook
