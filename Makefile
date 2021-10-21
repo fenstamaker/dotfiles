@@ -48,7 +48,7 @@ check:
 .PHONY: install
 install:
 ifdef MACOS
-	ansible-playbook -i hosts macos.yml -v --ask-become-pass --skip-tags "work"
+	ansible-playbook -i hosts macos.yml -v --ask-become-pass --skip-tags "work" --skip-tags "gui"
 endif
 ifdef LINUX
 	@echo "Uhh, oops."

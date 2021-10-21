@@ -16,8 +16,8 @@
     name:
       - awscli
       - coreutils
-      - git
       - gnupg
+      - gnu-sed
       - gnutls
       - grep
       - ffmpeg

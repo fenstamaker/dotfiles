@@ -10,44 +10,19 @@ fi
 #  Functions
 # **************************************************
 
-function exists() {
-  COMMAND=$1
-  command -v ${COMMAND} 1>/dev/null 2>&1
-  return $?
-}
-
-function load-if-exists() {
-  FILE=$1
-  [ -f ${FILE} ] && source ${FILE}
-}
-
-## Fuzzy cd, searches through all directories recursively
-function fd() {
-  local dir
-  dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m) && cd "$dir"
-}
-
-## cd to a folder in ~/Projects
-function pd() {
-  local dir
-  dir=$(exa -aD ~/Projects | fzf +m) && cd "${HOME}/Projects/${dir}"
-}
-
-function dotfiles {
-  cd "${HOME}/dotfiles"
-}
+source ~/.zsh.d/functions.zsh
 
 # **************************************************
 #  Env Setup
 # **************************************************
 
 ## pyenv
-if exists pyenv; then
+if command-exists pyenv; then
   eval "$(pyenv init -)"
 fi
 
 ## jenv
-if exists jenv; then
+if command-exists jenv; then
   path=(
     "${HOME}/.jenv/bin"
     $path
@@ -57,6 +32,14 @@ if exists jenv; then
 
   jenv enable-plugin export 1> /dev/null
   jenv enable-plugin maven 1> /dev/null
+fi
+
+## Homebrew completions
+if command-exists brew; then
+  fpath=(
+    $fpath
+    $(brew --prefix)/share/zsh/site-functions
+  )
 fi
 
 
@@ -72,14 +55,6 @@ load-if-exists ~/.p10k.zsh
 
 ## z
 load-if-exists /usr/local/etc/profile.d/z.sh 
-
-## Homebrew completions
-if exists brew; then
-  fpath=(
-    $fpath
-    $(brew --prefix)/share/zsh/site-functions
-  )
-fi
 
 
 # **************************************************
@@ -148,15 +123,7 @@ setopt HIST_VERIFY
 # Beep when accessing nonexistent history.
 setopt HIST_BEEP
 
-# Excludes certain commands from history
-# rm - Could include sensitve files
-# echo - Could include passwords/keys
-function zshaddhistory() {
-    emulate -L zsh
-    if [[ $1 =~ "\brm\b|^echo" ]] ; then
-        return 1
-    fi
-}
+
 
 
 # **************************************************
@@ -165,11 +132,13 @@ function zshaddhistory() {
 KEYTIMEOUT=1
 CASE_SENSITIVE="false"
 
-FZF_COMPLETION_TRIGGER='**'
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=80
 
 GREP_OPTIONS="--color=auto"
 CLICOLOR=1
+
+export FZF_COMPLETION_TRIGGER='**'
+export FZF_DEFAULT_OPTS='--height 40% --layout reverse'
 
 
 
@@ -188,6 +157,15 @@ alias l='exa -algF'
 alias ll='exa -algF'
 alias t='exa --tree --git-ignore'
 alias tt='exa --tree --git-ignore'
+
+
+alias gaa="git-add ."
+alias gcm="git commit -m"
+alias gp="git push"
+alias gpp="git-push-branch"
+alias gpl="git-pull-branch"
+alias gr="git reset"
+alias gs="git status"
 
 
 alias sublime="open -a /Applications/Sublime\ Text.app"
