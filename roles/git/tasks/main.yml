@@ -1,0 +1,15 @@
+- include_tasks: "{{ ansible_os_family | lower }}.yml"
+
+- name: link git configs
+  file:
+    src: "{{ role_path }}/files/{{ item }}"
+    path: "${HOME}/{{ item }}"
+    state: link
+    force: true
+  loop:
+    - .gitignore_global
+
+- name: Make sure gitconfig is up to date
+  template:
+    src: ".gitconfig.j2"
+    dest: "${HOME}/.gitconfig"

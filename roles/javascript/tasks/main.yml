@@ -19,3 +19,12 @@
     - prettier
     - npm-upgrade
     - typescript
+
+- name: link eslint configs
+  file:
+    src: "{{ role_path }}/files/{{ item }}"
+    path: "${HOME}/{{ item }}"
+    state: link
+    force: true
+  loop:
+    - .eslintrc

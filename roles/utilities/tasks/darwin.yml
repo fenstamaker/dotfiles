@@ -14,7 +14,9 @@
       - aws-cdk
       - bat
       - csvkit
+      - diff-so-fancy
       - exa
+      - fd
       - flyway
       - gron
       - hub
@@ -51,6 +53,8 @@
       - visual-studio-code
     accept_external_apps: true
     state: present
+  tags:
+    - gui
 
 - name: install work-only gui tools
   community.general.homebrew_cask:
@@ -62,6 +66,7 @@
     state: present
   tags:
     - work
+    - gui
 
 - name: install personal-only gui tools
   community.general.homebrew_cask:
@@ -82,3 +87,4 @@
     state: present
   tags:
     - personal
+    - gui

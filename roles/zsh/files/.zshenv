@@ -19,6 +19,7 @@ grep -q "Microsoft" /proc/version 2>/dev/null && export UBUNTU_ON_WINDOWS=1
 
 CUSTOM_PREPEND_PATH=(
   /usr/local/opt/coreutils/libexec/gnubin
+  /usr/local/opt/gnu-sed/libexec/gnubin
   /usr/local/opt/python/libexec/bin
   ${HOME}/.local/bin
 )

@@ -1,10 +1,10 @@
 [user]
-	name = Gary Fenstamaker
-	email = gary.fenstamaker@washpost.com
-        username = fenstamaker
+	name = {{ git.name }}
+	email = {{ git.email }}
+        username = {{ git.username }}
 
 [core]
-	excludesfile = /Users/fenstamakerg/.gitignore_global
+	excludesfile = {{ home_dir }}/.gitignore_global
         pager = diff-so-fancy | less --tabs=4 -RFX
 
 [color]
@@ -24,12 +24,8 @@
         new = green
         whitespace = red reverse
 
-# [submodule]
-#         recurse = true
-
 [alias]
         cc = clone --recursive
-[credential]
-	helper = store --file ~/.my-credentials
+
 [init]
 	defaultBranch = main

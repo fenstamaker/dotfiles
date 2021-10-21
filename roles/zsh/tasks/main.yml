@@ -32,6 +32,7 @@
     - .zshenv
     - .zshrc
     - .p10k.zsh
+    - .zsh.d
 
 - name: install zinit
   shell:
