@@ -1,0 +1,9 @@
+- name: install zsh from brew
+  community.general.homebrew:
+    name:
+      - fzf
+      - zsh
+      - zsh-completions
+
+- name: switch to brew zsh
+  shell: sudo dxcl . -create /Users/${USER} UserShell /usr/local/bin/zsh

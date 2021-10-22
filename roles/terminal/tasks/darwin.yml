@@ -1,0 +1,12 @@
+- name: install pyenv python environment
+  community.general.homebrew_cask:
+    name:
+      - iterm2
+    accept_external_apps: true
+    state: present
+
+- name: sync iterm2 preferences
+  command: defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "{{ role_path }}/files/iterm2"
+
+- name: load item2 preferences
+  command: defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true

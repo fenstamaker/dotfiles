@@ -1,0 +1,5 @@
+- name: installing brew node
+  community.general.homebrew:
+    name:
+      - node
+    state: present

@@ -1,0 +1,13 @@
+- name: install minikube/hyperkit
+  community.general.homebrew:
+    name:
+      - hyperkit
+      - minikube
+    state: present
+
+- name: install docker
+  community.general.homebrew:
+    name:
+      - docker
+      - docker-compose
+    state: present

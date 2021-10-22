@@ -1,0 +1,30 @@
+- include_tasks: "{{ ansible_os_family | lower }}.yml"
+
+- name: update npm
+  command: npm install -g npm@latest
+  tags:
+    - always
+
+- name: install yarn
+  community.general.npm:
+    name: yarn
+    global: yes
+    version: "1.22.15"
+
+- name: install global npm packages
+  community.general.npm:
+    name: "{{ item }}"
+    global: yes
+  loop:
+    - prettier
+    - npm-upgrade
+    - typescript
+
+- name: link eslint configs
+  file:
+    src: "{{ role_path }}/files/{{ item }}"
+    path: "${HOME}/{{ item }}"
+    state: link
+    force: true
+  loop:
+    - .eslintrc

@@ -1,0 +1,6 @@
+- include_tasks: "{{ ansible_os_family | lower }}.yml"
+
+- name: install pipx tools
+  shell: ~/.local/bin/pipx install --force {{ item }}
+  loop:
+    - clokta

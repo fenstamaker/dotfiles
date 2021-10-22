@@ -1,0 +1,9 @@
+pyenv_global_version: 3.10.0
+jenv_global_version: 17
+
+git:
+  email: 1165812+fenstamaker@users.noreply.github.com
+  username: fenstamaker
+  name: Gary Fenstamaker
+
+home_dir: "{{ '~' | expanduser }}"

@@ -1,0 +1,4 @@
+- include_tasks: "{{ ansible_os_family | lower }}.yml"
+
+- name: make java@latest global in jenv
+  command: jenv global {{ jenv_global_version }}

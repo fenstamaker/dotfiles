@@ -1,0 +1,89 @@
+- name: installing databases and services
+  community.general.homebrew:
+    name:
+      - apache-spark
+      - kafka
+      - mysql
+      - postgresql
+      - redis
+    state: present
+
+- name: installing tui tools
+  community.general.homebrew:
+    name:
+      - aws-cdk
+      - bat
+      - csvkit
+      - diff-so-fancy
+      - exa
+      - fd
+      - flyway
+      - gron
+      - hub
+      - jq
+      - fgeller/tap/kt
+      - pandoc
+      - pngcrush
+      - pre-commit
+      - python-yq
+      - the_silver_searcher
+      - tldr
+      - tmux
+      - tree
+      - xsv
+      - yamllint
+      - youtube-dl
+      - z
+    state: present
+
+- name: install (work and personal) gui tools
+  community.general.homebrew_cask:
+    name:
+      - 1password
+      - 1password-cli
+      - aerial
+      - alfred
+      - audacity
+      - bettertouchtool
+      - betterzip
+      - insomnia
+      # - spectacle # TODO: Migrate to rectangle
+      - sublime-text
+      - visual-studio-code
+    accept_external_apps: true
+    state: present
+  tags:
+    - gui
+
+- name: install work-only gui tools
+  community.general.homebrew_cask:
+    name:
+      - intellij-idea
+      - robo-3t
+      - tableplus
+    accept_external_apps: true
+    state: present
+  tags:
+    - work
+    - gui
+
+- name: install personal-only gui tools
+  community.general.homebrew_cask:
+    name:
+      - agenda
+      - arduino
+      # - astropad
+      - devonthink
+      - disk-drill
+      - dropbox
+      - firefox
+      - iina
+      - libreoffice
+      - microsoft-office
+      - notion
+      - processing
+    accept_external_apps: true
+    state: present
+  tags:
+    - personal
+    - gui
