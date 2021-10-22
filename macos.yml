@@ -3,10 +3,11 @@
   environment:
     PATH: "{{ ansible_env.PATH }}:~/.local/bin"
   roles:
-    # - core
+    - core
+    - terminal
     - zsh
     - git
-    # - python
-    # - java
+    - python
+    - java
     - javascript
-    # - utilities
+    - utilities
