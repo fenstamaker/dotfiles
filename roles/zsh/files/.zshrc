@@ -1,3 +1,7 @@
+# **************************************************
+#  Instant Prompt
+# **************************************************
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -5,6 +9,53 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+
+autoload -Uz compinit  && compinit
+
+# **************************************************
+#  Zsh Settings
+# **************************************************
+
+# Set emacs keybindings
+set -o emacs
+
+autoload -U colors && colors
+
+# setopt extendedglob
+
+# Auto-escapes pasted URLs to avoid extended globbing
+autoload -U url-quote-magic bracketed-paste-magic
+zle -N self-insert url-quote-magic
+zle -N bracketed-paste bracketed-paste-magic
+
+# Automatically list choices on an ambiguous completion. 
+setopt auto_list
+
+
+HISTFILE=~/.zsh_history
+HISTSIZE=10000000
+SAVEHIST=10000000
+
+setopt bang_hist 
+setopt extended_history
+
+setopt append_history  # Write to the history file immediately, not when the shell exits.
+setopt share_history   # Share history between all sessions.
+
+setopt hist_expire_dups_first  # Expire duplicate entries first when trimming history.
+setopt hist_ignore_dups        # Don't record an entry that was just recorded again.
+setopt hist_ignore_all_dups    # Delete old recorded entry if new entry is a duplicate.
+setopt hist_find_no_dups       # Do not display a line previously found.
+setopt hist_ignore_space       # Don't record an entry starting with a space.
+setopt hist_save_no_dups       # Don't write duplicate entries in the history file.
+setopt hist_reduce_blanks      # Remove superfluous blanks before recording entry.
+setopt hist_verify             # Don't execute immediately upon history expansion.
+
+setopt no_beep
+
+# Loads cdr command, lets you go back to previous pwd
+# autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+# add-zsh-hook chpwd chpwd_recent_dirs
 
 # **************************************************
 #  Functions
@@ -174,8 +225,3 @@ alias sublime="open -a /Applications/Sublime\ Text.app"
 # **************************************************
 #  Final Setup
 # **************************************************
-
-autoload -U compinit && compinit
-
-# Makes $path unique
-typeset -U path
