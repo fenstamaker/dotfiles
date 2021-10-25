@@ -1,0 +1,20 @@
+- name: installing other languages
+  community.general.homebrew:
+    name:
+      - clojure
+      - ruby
+      - scala
+    state: present
+
+- name: install clojure tools
+  community.general.homebrew:
+    name:
+      - boot-clj
+      - leiningen
+    state: present
+
+- name: install scala tools
+  community.general.homebrew:
+    name:
+      - sbt
+    state: present

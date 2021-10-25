@@ -75,61 +75,23 @@ function git-submodule-clone() {
 #  Navigation Functions
 # **************************************************
 
-alias zfzf="fzf +m --layout reverse --height 40%"
+alias zfzf="fzf --layout reverse --height 40%"
 
 function dotfiles() {
   cd "${HOME}/dotfiles"
 }
 
-function f() {
-  # Adapted from https://github.com/junegunn/fzf/wiki/examples
-  # Store the program
-  local program="$1"
-
-  if [ -z "${program}" ]; then 
-    return 1
-  fi
-
-  local fd_args=""
-
-  if [[ "${program}" =~ "^cd$" ]]; then 
-    fd_args+="--type=d"
-  fi
-
-  if [[ "${program}" =~ "^(mv|cp|rm|rip)$" ]]; then 
-    fd_args+="--hidden"
-  fi
-
-  # Store option flags with separating spaces, or just set as single space
-  local options="${@:2}"
-  if [ -z "${options}" ]; then
-    options=" "
-  else
-    options=" $options "
-  fi
-
-  arguments=$(fd ${fd_args}| fzf --multi | sed -z "s/\([^\n]*\)/'\1'/g; s/''//g; s/\n/ /g; s/[ \t]*$//")
-
-  if [ -z "${arguments}" ]; then
-    return 1
-  fi
-
-  print -z -- "${program}${options}${arguments}"
-}
-
-
 # Find text in project
 function fg() {
   local file
   local line
+  read -r file line <<< $(
+    ag --nobreak --noheading $@ | 
+    fzf --border -0 -1 | 
+    awk -F: '{print $1, $2}'
+  )
 
-  read -r file line <<<"$(ag --nobreak --noheading $@ | zfzf --border -0 -1 | awk -F: '{print $1, $2}')"
-
-  echo $file
-  # if [[ -n $file ]]
-  # then
-  #    emacs $file +$line
-  # fi
+  echo $file:$line
 }
 
 ## cd to a folder in ~/Projects
@@ -142,7 +104,7 @@ function pd() {
 ## Fuzzy cd, searches through all directories recursively
 function zd() {
   local dir
-  dir=$(find ${1:-.} -type d 2> /dev/null | zfzf) 
+  dir=$(fd ${1:-.} --type d 2> /dev/null | zfzf) 
   cd "${dir}"
 }
 
@@ -156,7 +118,7 @@ function zdf() {
 }
 
 ## Interactive cd for parent directories
-function zdp() {
+function zdr() {
   local declare dirs=()
   get_parent_dirs() {
     if [[ -d "${1}" ]]; then dirs+=("$1"); else return; fi

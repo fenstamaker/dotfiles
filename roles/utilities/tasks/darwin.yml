@@ -47,9 +47,10 @@
       - bettertouchtool
       - betterzip
       - insomnia
-      # - spectacle # TODO: Migrate to rectangle
+      - rectangle
       - sublime-text
-      - visual-studio-code
+      - vscodium
+      # - visual-studio-code
     accept_external_apps: true
     state: present
   tags:
@@ -72,14 +73,12 @@
     name:
       - agenda
       - arduino
-      # - astropad
       - devonthink
       - disk-drill
       - dropbox
       - firefox
       - iina
       - libreoffice
-      - microsoft-office
       - notion
       - processing
     accept_external_apps: true

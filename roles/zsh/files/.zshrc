@@ -54,8 +54,10 @@ setopt hist_verify             # Don't execute immediately upon history expansio
 setopt no_beep
 
 # Loads cdr command, lets you go back to previous pwd
-# autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
-# add-zsh-hook chpwd chpwd_recent_dirs
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+add-zsh-hook chpwd chpwd_recent_dirs
+
+FZF_DEFAULT_COMMAND="fd --type f"
 
 # **************************************************
 #  Functions
@@ -140,41 +142,6 @@ zinit wait lucid for \
     zsh-users/zsh-autosuggestions \
   blockf atpull'zinit creinstall -q .' \
     zsh-users/zsh-completions 
-
-
-# **************************************************
-#  zsh configuration
-# **************************************************
-
-setopt BANG_HIST
-setopt EXTENDED_HISTORY
-
-# Write to the history file immediately, not when the shell exits.
-setopt APPEND_HISTORY
-setopt SHARE_HISTORY
-
-# Share history between all sessions.
-setopt SHARE_HISTORY
-# Expire duplicate entries first when trimming history.
-setopt HIST_EXPIRE_DUPS_FIRST
-# Don't record an entry that was just recorded again.
-setopt HIST_IGNORE_DUPS
-# Delete old recorded entry if new entry is a duplicate.
-setopt HIST_IGNORE_ALL_DUPS
-# Do not display a line previously found.
-setopt HIST_FIND_NO_DUPS
-# Don't record an entry starting with a space.
-setopt HIST_IGNORE_SPACE
-# Don't write duplicate entries in the history file.
-setopt HIST_SAVE_NO_DUPS
-# Remove superfluous blanks before recording entry.
-setopt HIST_REDUCE_BLANKS
-# Don't execute immediately upon history expansion.
-setopt HIST_VERIFY
-# Beep when accessing nonexistent history.
-setopt HIST_BEEP
-
-
 
 
 # **************************************************

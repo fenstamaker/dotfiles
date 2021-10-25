@@ -1,20 +1,7 @@
-- name: install zsh from brew
-  community.general.homebrew:
-    name:
-      - fzf
-      - zsh
-      - zsh-completions
+- include_tasks: "{{ ansible_os_family | lower }}.yml"
 
 - name: post-install fzf
   shell: "$(brew --prefix)/opt/fzf/install"
-
-- name: get current shell
-  command: dscl . -read /Users/${USER} UserShell
-  register: current_shell
-
-- name: switch to brew zsh
-  command: sudo dscl . -create /Users/${USER} UserShell /usr/local/bin/zsh
-  when: "current_shell.stdout != 'UserShell: /usr/local/bin/zsh'"
 
 - name: make zsh.d
   file:

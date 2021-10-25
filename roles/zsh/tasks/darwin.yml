@@ -5,5 +5,10 @@
       - zsh
       - zsh-completions
 
+- name: get current shell
+  command: dscl . -read /Users/${USER} UserShell
+  register: current_shell
+
 - name: switch to brew zsh
-  shell: sudo dxcl . -create /Users/${USER} UserShell /usr/local/bin/zsh
+  command: sudo dscl . -create /Users/${USER} UserShell /usr/local/bin/zsh
+  when: "current_shell.stdout != 'UserShell: /usr/local/bin/zsh'"
