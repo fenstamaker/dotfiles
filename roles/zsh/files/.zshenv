@@ -1,8 +1,10 @@
 # OS variables
 [ "$(uname -s)" = "Darwin" ] && export MACOS=1 && export UNIX=1
 [ "$(uname -s)" = "Linux" ] && export LINUX=1 && export UNIX=1
+[ "$(uname -m)" = "arm64" ] && export ARM=1
 uname -s | grep -q "_NT-" && export WINDOWS=1
 grep -q "Microsoft" /proc/version 2>/dev/null && export UBUNTU_ON_WINDOWS=1
+ 
 
 # Makes $path (and $PATH) unique
 typeset -U path
@@ -32,6 +34,7 @@ CUSTOM_PREPEND_PATH=(
   # Homebrew
   /usr/local/bin
   /usr/local/sbin
+  /opt/homebrew/bin
 )
 
 CUSTOM_APPEND_PATH=()

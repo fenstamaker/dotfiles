@@ -9,6 +9,10 @@
   command: dscl . -read /Users/${USER} UserShell
   register: current_shell
 
-- name: switch to brew zsh
+- name: switch to brew zsh (arm64)
+  command: sudo dscl . -create /Users/${USER} UserShell /opt/homebrew/bin/zsh
+  when: "ansible_architecture == 'arm64' and current_shell.stdout != 'UserShell: /opt/homebrew/bin/zsh'"
+
+- name: switch to brew zsh (x86_64)
   command: sudo dscl . -create /Users/${USER} UserShell /usr/local/bin/zsh
-  when: "current_shell.stdout != 'UserShell: /usr/local/bin/zsh'"
+  when: "ansible_architecture == 'x86_64' and current_shell.stdout != 'UserShell: /usr/local/bin/zsh'"

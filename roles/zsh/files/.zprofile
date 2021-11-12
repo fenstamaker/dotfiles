@@ -7,6 +7,8 @@ path=(
 )
 
 if [ $MACOS -eq 1 ]; then 
+  # On M1 Macs, Homebrew installs in /opt/homebrew instead of /usr/local
+  eval "$(/opt/homebrew/bin/brew shellenv)"
   eval "$(pyenv init --path)"
 else 
   export PYENV_ROOT="$HOME/.pyenv"
