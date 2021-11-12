@@ -47,7 +47,7 @@
 
 - name: install pipx packages
   command:
-    cmd: pipx install {{ item }}
+    cmd: ~/.local/bin/pipx install {{ item }}
     creates: ~/.local/bin/{{ item }}
   loop:
     - black
