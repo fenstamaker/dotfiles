@@ -31,6 +31,7 @@
     name:
       - font-hack
       - font-hack-nerd-font
+      - font-meslo-lg-nerd-font
       - font-source-code-pro
       - font-source-code-pro-for-powerline
     state: present
@@ -46,8 +47,15 @@
       - suspicious-package
       - apparency
       - quicklookase
+    state: present
+
+- name: install brew quicklooks (x86_64 only)
+  community.general.homebrew_cask:
+    name:
       - qlvideo
     state: present
+  when: "ansible_architecture == 'x86_64'"
+
 
 - name: move quicklook extensions out of quarantine
   command: xattr -cr ~/Library/QuickLook
