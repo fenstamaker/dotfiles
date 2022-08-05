@@ -114,7 +114,8 @@ load-if-exists /usr/local/etc/profile.d/z.sh
 #  Zinit
 # **************************************************
 
-source "$HOME/.zinit/bin/zinit.zsh"
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+source "${ZINIT_HOME}/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 ### End of Zinit's installer chunk
@@ -186,3 +187,11 @@ alias sublime="open -a /Applications/Sublime\ Text.app"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+### End of Zinit's installer chunk
+
+# To customize prompt, run `p10k configure` or edit ~/dotfiles/roles/zsh/files/.p10k.zsh.
+[[ ! -f ~/dotfiles/roles/zsh/files/.p10k.zsh ]] || source ~/dotfiles/roles/zsh/files/.p10k.zsh
